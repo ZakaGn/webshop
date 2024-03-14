@@ -1,5 +1,6 @@
 package com.example.webshop.service;
 
+import com.example.webshop.dto.LoginDTO;
 import com.example.webshop.dto.UserDTO;
 import com.example.webshop.exception.apiException.badRequestException.UserAlreadyExistsException;
 import com.example.webshop.model.User;
@@ -41,9 +42,9 @@ public class UserService{
 		return new UserDTO(savedUser);
 	}
 
-	public String login(String email, String password){
+	public String login(LoginDTO loginDTO){
 		Authentication authentication = authenticationManager.authenticate(
-			new UsernamePasswordAuthenticationToken(email, password));
+			new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
 		return jwtTokenProvider.generateToken(authentication);
 	}
 

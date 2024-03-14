@@ -1,5 +1,6 @@
 package com.example.webshop.service;
 
+import com.example.webshop.dto.LoginDTO;
 import com.example.webshop.dto.UserDTO;
 import com.example.webshop.model.User;
 import com.example.webshop.repository.UserRepository;
@@ -58,22 +59,25 @@ public class UserServiceTest{
 	}
 
 	@Test
-	void loginUserSuccessfully(){
+	void loginUserSuccessfully() {
 		// Setup
-		String email = "john@example.com";
-		String password = "password";
+		LoginDTO loginDTO = new LoginDTO("john@example.com", "password");
 		String expectedToken = "jwtToken";
 
-		when(authenticationManager.authenticate(any())).thenReturn(mock(Authentication.class));
-		when(jwtTokenProvider.generateToken(any(Authentication.class))).thenReturn(expectedToken);
+		when(authenticationManager.authenticate(any(Authentication.class)))
+			.thenReturn(mock(Authentication.class));
+		when(jwtTokenProvider.generateToken(any(Authentication.class)))
+			.thenReturn(expectedToken);
 
 		// Action
-		String actualToken = userService.login(email, password);
+		String actualToken = userService.login(loginDTO);
 
 		// Assert
-		assertNotNull(actualToken);
-		assertEquals(expectedToken, actualToken);
-		verify(authenticationManager).authenticate(new UsernamePasswordAuthenticationToken(email, password));
+		assertNotNull(actualToken, "Token should not be null");
+		assertEquals(expectedToken, actualToken, "Expected token does not match the actual token");
+
+		// Verifications
+		verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
 		verify(jwtTokenProvider).generateToken(any(Authentication.class));
 	}
 
