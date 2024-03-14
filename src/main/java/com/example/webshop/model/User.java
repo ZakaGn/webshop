@@ -1,4 +1,4 @@
-package model;
+package com.example.webshop.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
