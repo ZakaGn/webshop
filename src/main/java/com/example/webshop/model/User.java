@@ -1,35 +1,51 @@
 package com.example.webshop.model;
 
+import com.example.webshop.model.auth.Credentials;
+import com.example.webshop.model.auth.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import java.sql.Timestamp;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import java.util.Collection;
 
-@Getter
-@Setter
-@Entity
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Table(name = "users")
+@AllArgsConstructor
+@Entity
+@Table(name = "Users")
 public class User{
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(nullable = false, unique = true, length = 50)
-	private String username;
+	private String firstName;
 
-	@Column(nullable = false, length = 100)
-	private String password;
+	private String lastName;
 
-	@Column(nullable = false)
-	private Boolean enabled;
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(referencedColumnName = "id", nullable = false, unique = true)
+	@Getter(AccessLevel.NONE)
+	private Credentials credentials;
 
-	@Column(nullable = false, unique = true, length = 100)
-	private String email;
+	public String getEmail(){
+		return this.credentials.getEmail();
+	}
 
-	@Column(name = "created_at", nullable = false, updatable = false)
-	private Timestamp createdAt;
+	public String getPassword(){
+		return this.credentials.getPassword();
+	}
+
+	public Role getRole(){
+		return this.credentials.getRole();
+	}
+
+	public void setEmail(String email){
+		this.credentials.setEmail(email);
+	}
+	public void setRole(Role role){
+		this.credentials.setRole(role);
+	}
+
+	public Collection<? extends GrantedAuthority> getAuthorities(){
+		return this.credentials.getAuthorities();
+	}
 }
