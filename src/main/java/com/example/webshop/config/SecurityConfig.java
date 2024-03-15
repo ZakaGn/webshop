@@ -39,17 +39,13 @@ public class SecurityConfig{
 			.csrf(AbstractHttpConfigurer::disable)
 			.cors(Customizer.withDefaults())
 			.authorizeHttpRequests(auth -> auth
-				.requestMatchers(POST, "/user/login").permitAll()
-				.requestMatchers(POST, "/user/register").permitAll()
+				.requestMatchers(POST, "/user/login", "/user/register").permitAll()
 				.requestMatchers(GET, "/user/me").hasAnyAuthority("CLIENT", "EMPLOYER", "MANAGER")
-				.anyRequest().denyAll()
+				.anyRequest().authenticated()
 			)
-			.sessionManagement(
-				(securityManagement) -> securityManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			)
-			.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.exceptionHandling(configurer -> configurer.authenticationEntryPoint(authenticationEntryPoint))
-		;
+			.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
 

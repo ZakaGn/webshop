@@ -11,20 +11,19 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 public class User{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "credentials_id", referencedColumnName = "id")
+	private Credentials credentials;
+
 	private String firstName;
 
 	private String lastName;
-
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(referencedColumnName = "id", nullable = false, unique = true)
-	@Getter(AccessLevel.NONE)
-	private Credentials credentials;
 
 	public String getEmail(){
 		return this.credentials.getEmail();

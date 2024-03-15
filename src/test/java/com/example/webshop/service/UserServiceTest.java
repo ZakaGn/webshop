@@ -1,6 +1,7 @@
 package com.example.webshop.service;
 
 import com.example.webshop.dto.LoginDTO;
+import com.example.webshop.dto.RegisterDTO;
 import com.example.webshop.dto.UserDTO;
 import com.example.webshop.model.User;
 import com.example.webshop.repository.UserRepository;
@@ -42,19 +43,18 @@ public class UserServiceTest{
 	@Test
 	void registerUserSuccessfully(){
 		// Setup
-		UserDTO userDTO = new UserDTO("John", "Doe", "CLIENT");
-		userDTO.setEmail("john@example.com");
+		RegisterDTO registerDTO = new RegisterDTO("John", "Doe", "john@example.com", "pass");
 
 		when(userRepository.findUserByCredentialsEmail(anyString())).thenReturn(Optional.empty());
 		when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 		when(userRepository.save(any(User.class))).thenAnswer(i -> i.getArgument(0));
 
 		// Action
-		UserDTO result = userService.register(userDTO);
+		UserDTO result = userService.register(registerDTO);
 
 		// Assert
 		assertNotNull(result);
-		assertEquals(userDTO.getEmail(), result.getEmail());
+		assertEquals(registerDTO.getEmail(), result.getEmail());
 		verify(userRepository).save(any(User.class));
 	}
 

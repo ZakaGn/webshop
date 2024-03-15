@@ -7,7 +7,9 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
 
 public interface UserRepository extends JpaRepository<User, Long>{
-	@Query("SELECT c FROM Credentials c WHERE c.email = ?1")
-	Optional<Credentials> findCredentials(String email);
+	//@Query("SELECT c FROM Credentials c WHERE c.email = ?1")
+	//Optional<Credentials> findCredentials(String email);
+	@Query("SELECT u FROM User u WHERE u.credentials.email = ?1")
 	Optional<User> findUserByCredentialsEmail(String email);
+	//Optional<User> findUserByCredentialsEmail(String email);
 }

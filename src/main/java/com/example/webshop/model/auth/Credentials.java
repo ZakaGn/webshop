@@ -29,8 +29,7 @@ public final class Credentials implements UserDetails{
 	@Column(nullable = false)
 	private Role role;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(referencedColumnName = "id", unique = true)
+	@OneToOne(mappedBy = "credentials")
 	private User user;
 
 	@Override

@@ -1,6 +1,7 @@
 package com.example.webshop.service;
 
 import com.example.webshop.dto.LoginDTO;
+import com.example.webshop.dto.RegisterDTO;
 import com.example.webshop.dto.UserDTO;
 import com.example.webshop.exception.apiException.badRequestException.UserAlreadyExistsException;
 import com.example.webshop.model.User;
@@ -26,17 +27,17 @@ public class UserService{
 	private final AuthenticationManager authenticationManager;
 
 	@Transactional
-	public UserDTO register(UserDTO userDto){
-		if(userRepository.findUserByCredentialsEmail(userDto.getEmail()).isPresent()){
-			throw new UserAlreadyExistsException(userDto.getEmail());
+	public UserDTO register(RegisterDTO registerDTO){
+		if(userRepository.findUserByCredentialsEmail(registerDTO.getEmail()).isPresent()){
+			throw new UserAlreadyExistsException(registerDTO.getEmail());
 		}
 		User newUser = new User();
-		newUser.setFirstName(userDto.getFirstName());
-		newUser.setLastName(userDto.getLastName());
+		newUser.setFirstName(registerDTO.getFirstName());
+		newUser.setLastName(registerDTO.getLastName());
 		Credentials credentials = new Credentials();
-		credentials.setEmail(userDto.getEmail());
-		credentials.setPassword(passwordEncoder.encode("defaultPassword"));
-		credentials.setRole(Role.valueOf(userDto.getRole()));
+		credentials.setEmail(registerDTO.getEmail());
+		credentials.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
+		credentials.setRole(Role.CLIENT);
 		newUser.setCredentials(credentials);
 		User savedUser = userRepository.save(newUser);
 		return new UserDTO(savedUser);

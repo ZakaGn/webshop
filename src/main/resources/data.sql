@@ -1,66 +1,35 @@
--- Inserting users with encrypted passwords
-INSERT INTO users (username, password, enabled, email, created_at)
-VALUES ('user1', 'ENCRYPTED_PASSWORD_HERE', TRUE, 'user1@example.com', CURRENT_TIMESTAMP);
+INSERT INTO users (first_name, last_name)
+VALUES ('John', 'Doe'),
+       ('Jane', 'Smith');
 
-INSERT INTO users (username, password, enabled, email, created_at)
-VALUES ('admin', 'ENCRYPTED_PASSWORD_HERE', TRUE, 'admin@example.com', CURRENT_TIMESTAMP);
+INSERT INTO credentials (email, password, role, user_id)
+VALUES ('john.doe@example.com', 'password_hash', 'USER',
+        (SELECT id FROM users WHERE first_name = 'John' AND last_name = 'Doe')),
+       ('jane.smith@example.com', 'password_hash', 'ADMIN',
+        (SELECT id FROM users WHERE first_name = 'Jane' AND last_name = 'Smith'));
 
--- Inserting authorities for the users
-INSERT INTO authorities (user_id, authority) VALUES ((SELECT id FROM users WHERE username = 'user1'), 'ROLE_USER');
-INSERT INTO authorities (user_id, authority) VALUES ((SELECT id FROM users WHERE username = 'admin'), 'ROLE_ADMIN');
-
--- Inserting categories
-INSERT INTO categories (name, description) VALUES ('Electronics', 'Electronic devices and accessories.');
-INSERT INTO categories (name, description) VALUES ('Books', 'All kinds of books.');
-
--- Inserting products
-INSERT INTO products (name, description, price, quantity, category_id)
-VALUES (
-        'Smartphone',
-        'Latest model smartphone',
-        299.99,
-        100,
-        (SELECT category_id FROM categories WHERE name = 'Electronics')
-    );
+INSERT INTO categories (name, description)
+VALUES ('Electronics', 'Electronic gadgets and devices.'),
+       ('Books', 'A variety of books from various genres.');
 
 INSERT INTO products (name, description, price, quantity, category_id)
-VALUES (
-        'Laptop',
-        'High-performance laptop',
-        999.99,
-        50,
-        (SELECT category_id FROM categories WHERE name = 'Electronics')
-    );
+VALUES ('Smartphone', 'Latest model with high-resolution camera.', 599.99, 30,
+        (SELECT category_id FROM categories WHERE name = 'Electronics')),
+       ('Laptop', 'Lightweight and powerful performance.', 1200.00, 20,
+        (SELECT category_id FROM categories WHERE name = 'Electronics')),
+       ('Fantasy Novel', 'An epic tale of adventure.', 15.99, 100,
+        (SELECT category_id FROM categories WHERE name = 'Books'));
 
-INSERT INTO products (name, description, price, quantity, category_id)
-VALUES (
-        'Fantasy Novel',
-        'Bestselling fantasy novel',
-        9.99,
-        150,
-        (SELECT category_id FROM categories WHERE name = 'Books')
-    );
+INSERT INTO orders (user_id, status)
+VALUES ((SELECT id FROM users WHERE first_name = 'John'), 'PENDING');
 
--- Inserting an order
-INSERT INTO orders (user_id, order_date, status)
-VALUES ((SELECT id FROM users WHERE username = 'user1'), CURRENT_TIMESTAMP, 'PROCESSING');
-
--- Inserting order details
 INSERT INTO order_details (order_id, product_id, quantity, price)
-VALUES (
-        (SELECT order_id FROM orders WHERE user_id = (SELECT id FROM users WHERE username = 'user1')),
-        (SELECT product_id FROM products WHERE name = 'Smartphone'),
-        1,
-        (SELECT price FROM products WHERE name = 'Smartphone')
-    );
+VALUES ((SELECT order_id FROM orders WHERE user_id = (SELECT id FROM users WHERE first_name = 'John')),
+        (SELECT product_id FROM products WHERE name = 'Smartphone'), 1, 599.99);
 
--- Inserting a cart
-INSERT INTO cart (user_id, created_at) VALUES ((SELECT id FROM users WHERE username = 'user1'), CURRENT_TIMESTAMP);
+INSERT INTO cart (user_id)
+VALUES ((SELECT id FROM users WHERE first_name = 'Jane'));
 
--- Inserting cart items
 INSERT INTO cart_items (cart_id, product_id, quantity)
-VALUES (
-        (SELECT cart_id FROM cart WHERE user_id = (SELECT id FROM users WHERE username = 'user1')),
-        (SELECT product_id FROM products WHERE name = 'Fantasy Novel'),
-        2
-    );
+VALUES ((SELECT cart_id FROM cart WHERE user_id = (SELECT id FROM users WHERE first_name = 'Jane')),
+        (SELECT product_id FROM products WHERE name = 'Fantasy Novel'), 2);

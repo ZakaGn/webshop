@@ -30,6 +30,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 		@NotNull HttpServletResponse response,
 		@NotNull FilterChain filterChain
 	)throws ServletException, IOException{
+		String requestURI = request.getRequestURI();
+
+		if("/user/login".equals(requestURI) || "/user/register".equals(requestURI)){
+			filterChain.doFilter(request, response);
+			return;
+		}
+
 		String token = getJWTFromRequest(request);
 		if(StringUtils.hasText(token)){
 			try{
@@ -49,6 +56,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	}
 
 	private String getJWTFromRequest(HttpServletRequest request){
+		String bearerToken = request.getHeader("Authorization");
+		System.out.println("bearerToken: " + bearerToken);
 		return request.getHeader("Authorization");
 	}
 
