@@ -28,5 +28,10 @@ export const api = {
 		}catch(error){
 			throw error
 		}
+	},
+
+	updateUserProfile: async (userData) => {
+		return axiosInstance.post('/user/update', userData)
 	}
+
 }

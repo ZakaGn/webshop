@@ -2,6 +2,7 @@ package com.example.webshop.service;
 
 import com.example.webshop.dto.LoginDTO;
 import com.example.webshop.dto.RegisterDTO;
+import com.example.webshop.dto.UpdateUserDTO;
 import com.example.webshop.dto.UserDTO;
 import com.example.webshop.exception.apiException.badRequestException.UserAlreadyExistsException;
 import com.example.webshop.exception.apiException.badRequestException.UserNotFoundException;
@@ -50,11 +51,24 @@ public class UserService{
 		return jwtTokenProvider.generateToken(authentication);
 	}
 
-	public UserDTO getUserDataByEmail(String email) {
-		User user = userRepository
-			.findUserByCredentialsEmail(email)
-			.orElseThrow(UserNotFoundException::new);
+	public UserDTO getUserDataByEmail(String email){
+		User user = userRepository.findUserByCredentialsEmail(email).orElseThrow(UserNotFoundException::new);
 		return new UserDTO(user);
+	}
+
+	@Transactional
+	public void updateUserDetails(UpdateUserDTO updateUserDTO, String userEmail){
+		User user = userRepository.findUserByCredentialsEmail(userEmail).orElseThrow(UserNotFoundException::new);
+		user.setFirstName(updateUserDTO.getFirstName());
+		user.setLastName(updateUserDTO.getLastName());
+		if(
+			updateUserDTO.getEmail() != null &&
+			!updateUserDTO.getEmail().isEmpty() &&
+			!updateUserDTO.getEmail().equals(user.getCredentials().getEmail())
+		){
+			user.getCredentials().setEmail(updateUserDTO.getEmail());
+		}
+		userRepository.save(user);
 	}
 
 }

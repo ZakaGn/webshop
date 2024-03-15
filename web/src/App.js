@@ -7,6 +7,7 @@ import Register from './components/Register'
 import Dashboard from './components/Dashboard'
 import Navbar from './components/Navbar'
 import {ToastContainer} from "react-toastify";
+import ProfileEdit from "./components/ProfileEdit";
 
 function App(){
 	return (
@@ -18,6 +19,7 @@ function App(){
 					<Route path="/login" element={<Login/>}/>
 					<Route path="/register" element={<Register/>}/>
 					<Route path="/dashboard" element={<Dashboard/>}/>
+					<Route path="/edit-profile" element={<ProfileEdit />} />
 				</Routes>
 			</div>
 			<ToastContainer
