@@ -4,6 +4,7 @@ import com.example.webshop.dto.LoginDTO;
 import com.example.webshop.dto.RegisterDTO;
 import com.example.webshop.dto.UserDTO;
 import com.example.webshop.exception.apiException.badRequestException.UserAlreadyExistsException;
+import com.example.webshop.exception.apiException.badRequestException.UserNotFoundException;
 import com.example.webshop.model.User;
 import com.example.webshop.model.auth.Credentials;
 import com.example.webshop.model.auth.Role;
@@ -47,6 +48,13 @@ public class UserService{
 		Authentication authentication = authenticationManager.authenticate(
 			new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
 		return jwtTokenProvider.generateToken(authentication);
+	}
+
+	public UserDTO getUserDataByEmail(String email) {
+		User user = userRepository
+			.findUserByCredentialsEmail(email)
+			.orElseThrow(UserNotFoundException::new);
+		return new UserDTO(user);
 	}
 
 }

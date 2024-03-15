@@ -2,14 +2,13 @@ package com.example.webshop.controller;
 
 import com.example.webshop.dto.LoginDTO;
 import com.example.webshop.dto.RegisterDTO;
+import com.example.webshop.dto.TokenDTO;
 import com.example.webshop.dto.UserDTO;
 import com.example.webshop.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 @RestController
@@ -29,10 +28,15 @@ public class UserController{
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<String> loginUser(@Valid @RequestBody LoginDTO loginDTO){
+	public ResponseEntity<TokenDTO> loginUser(@Valid @RequestBody LoginDTO loginDTO){
 		String token = userService.login(loginDTO);
-		return ResponseEntity.ok(token);
+		return ResponseEntity.ok(new TokenDTO(token));
+	}
+
+	@GetMapping("/data")
+	public ResponseEntity<UserDTO> getUserData(@AuthenticationPrincipal String email){
+		UserDTO userDTO = userService.getUserDataByEmail(email);
+		return ResponseEntity.ok(userDTO);
 	}
 
 }
-

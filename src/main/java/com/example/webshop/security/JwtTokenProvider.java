@@ -33,12 +33,7 @@ public class JwtTokenProvider{
 	}
 
 	public String getEmailFromJWT(String token){
-		return Jwts.parserBuilder()
-		           .setSigningKey(apiKeySecretBytes)
-		           .build()
-		           .parseClaimsJws(token)
-		           .getBody()
-		           .getSubject();
+		return Jwts.parserBuilder().setSigningKey(apiKeySecretBytes).build().parseClaimsJws(token).getBody().getSubject();
 	}
 
 	public void validateToken(String token){

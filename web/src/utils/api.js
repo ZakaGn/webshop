@@ -22,7 +22,6 @@ export const api = {
 			const response = await axiosInstance.post('/user/login', {email, password})
 			const {token} = response.data
 			auth.saveToken(token)
-			return response.data
 		}catch(error){
 			throw error
 		}

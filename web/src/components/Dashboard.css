@@ -1,0 +1,36 @@
+.dashboard-container{
+	max-width: 600px;
+	margin: 20px auto;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	background-color: #f9f9f9;
+}
+
+.dashboard-container h1{
+	color: #333;
+	text-align: center;
+}
+
+.dashboard-loading{
+	text-align: center;
+	font-size: 20px;
+	margin-top: 50px;
+}
+
+.user-info{
+	background-color: #fff;
+	padding: 15px;
+	margin-bottom: 20px;
+	border-radius: 8px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.user-info p{
+	margin: 10px 0;
+	font-size: 16px;
+}
+
+.user-info p strong{
+	margin-right: 10px;
+}

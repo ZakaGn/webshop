@@ -3,7 +3,6 @@ import React, {useState} from 'react'
 import {toast} from 'react-toastify'
 import {useNavigate} from 'react-router-dom'
 import {api} from "../utils/api"
-import auth from '../utils/auth'
 
 const Login = () => {
 	const [formData, setFormData] = useState({email: '', password: ''})
@@ -41,10 +40,9 @@ const Login = () => {
 		}
 
 		try{
-			const data = await api.login(formData.email, formData.password)
-			auth.saveToken(data.token)
+			await api.login(formData.email, formData.password)
 			toast.success('Login successful!')
-			navigate("/")
+			navigate("/dashboard")
 		}catch(error){
 			toast.error(error.response?.data?.message || 'Failed to log in. Please try again.')
 		}
