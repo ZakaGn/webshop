@@ -2,8 +2,12 @@ package com.example.webshop.service;
 
 import com.example.webshop.dto.LoginDTO;
 import com.example.webshop.dto.RegisterDTO;
+import com.example.webshop.dto.UpdateUserDTO;
 import com.example.webshop.dto.UserDTO;
+import com.example.webshop.exception.apiException.badRequestException.UserNotFoundException;
 import com.example.webshop.model.User;
+import com.example.webshop.model.auth.Credentials;
+import com.example.webshop.model.auth.Role;
 import com.example.webshop.repository.UserRepository;
 import com.example.webshop.security.JwtTokenProvider;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,15 +63,13 @@ public class UserServiceTest{
 	}
 
 	@Test
-	void loginUserSuccessfully() {
+	void loginUserSuccessfully(){
 		// Setup
 		LoginDTO loginDTO = new LoginDTO("john@example.com", "password");
 		String expectedToken = "jwtToken";
 
-		when(authenticationManager.authenticate(any(Authentication.class)))
-			.thenReturn(mock(Authentication.class));
-		when(jwtTokenProvider.generateToken(any(Authentication.class)))
-			.thenReturn(expectedToken);
+		when(authenticationManager.authenticate(any(Authentication.class))).thenReturn(mock(Authentication.class));
+		when(jwtTokenProvider.generateToken(any(Authentication.class))).thenReturn(expectedToken);
 
 		// Action
 		String actualToken = userService.login(loginDTO);
@@ -79,6 +81,84 @@ public class UserServiceTest{
 		// Verifications
 		verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
 		verify(jwtTokenProvider).generateToken(any(Authentication.class));
+	}
+
+	@Test
+	void getUserDataByEmail_UserExists_ReturnsUserDTO(){
+		// Setup
+		String email = "john@example.com";
+		User user = new User();
+		user.setFirstName("John");
+		user.setLastName("Doe");
+		Credentials credentials = new Credentials();
+		credentials.setEmail(email);
+		credentials.setPassword("encodedPassword");
+		credentials.setRole(Role.CLIENT);
+		user.setCredentials(credentials);
+		when(userRepository.findUserByCredentialsEmail(email)).thenReturn(Optional.of(user));
+
+		// Action
+		UserDTO result = userService.getUserDataByEmail(email);
+
+		// Assert
+		assertNotNull(result);
+		assertEquals(email, result.getEmail());
+		assertEquals("John", result.getFirstName());
+		assertEquals("Doe", result.getLastName());
+
+		// Verification
+		verify(userRepository).findUserByCredentialsEmail(email);
+	}
+
+	@Test
+	void getUserDataByEmail_UserDoesNotExist_ThrowsException(){
+		// Setup
+		String email = "john@example.com";
+		when(userRepository.findUserByCredentialsEmail(email)).thenReturn(Optional.empty());
+
+		// Action & Assert
+		assertThrows(UserNotFoundException.class, () -> userService.getUserDataByEmail(email));
+
+		// Verification
+		verify(userRepository).findUserByCredentialsEmail(email);
+	}
+
+	@Test
+	void updateUserDetails_UserExists_UpdatesDetails(){
+		// Setup
+		String email = "john@example.com";
+		UpdateUserDTO updateUserDTO = new UpdateUserDTO("John", "Updated", email);
+		User user = new User();
+		user.setFirstName("John");
+		user.setLastName("Doe");
+		Credentials credentials = new Credentials();
+		credentials.setEmail(email);
+		credentials.setPassword("encodedPassword");
+		credentials.setRole(Role.CLIENT);
+		user.setCredentials(credentials);
+		when(userRepository.findUserByCredentialsEmail(email)).thenReturn(Optional.of(user));
+		when(userRepository.save(any(User.class))).thenAnswer(i -> i.getArgument(0));
+
+		// Action
+		userService.updateUserDetails(updateUserDTO, email);
+
+		// Assert
+		assertEquals("Updated", user.getLastName());
+		verify(userRepository).save(user);
+	}
+
+	@Test
+	void updateUserDetails_UserDoesNotExist_ThrowsException(){
+		// Setup
+		String email = "nonexistent@example.com";
+		UpdateUserDTO updateUserDTO = new UpdateUserDTO("John", "Doe", email);
+		when(userRepository.findUserByCredentialsEmail(email)).thenReturn(Optional.empty());
+
+		// Action & Assert
+		assertThrows(UserNotFoundException.class, () -> userService.updateUserDetails(updateUserDTO, email));
+
+		// Verification
+		verify(userRepository, never()).save(any(User.class));
 	}
 
 }
