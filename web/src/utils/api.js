@@ -1,20 +1,5 @@
-import axios from 'axios'
 import auth from './auth'
-
-const baseURL = 'http://localhost:8080'
-
-const axiosInstance = axios.create({
-	baseURL,
-})
-
-axiosInstance.interceptors.request.use(
-	config => {
-		const token = auth.getToken()
-		if(token){config.headers['Authorization'] = token}
-		return config
-	},
-	error => Promise.reject(error)
-)
+import axiosInstance from "./axiosInstance";
 
 export const api = {
 	login: async(email, password) => {
