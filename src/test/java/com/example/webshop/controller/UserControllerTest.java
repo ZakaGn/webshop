@@ -13,6 +13,7 @@ import org.mockito.quality.Strictness;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.security.Principal;
+import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -56,7 +57,7 @@ class UserControllerTest{
 		ResponseEntity<TokenDTO> response = userController.loginUser(loginDTO);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(expectedToken, response.getBody().getToken(), "Expected token does not match the actual token");
+		assertEquals(expectedToken, Objects.requireNonNull(response.getBody()).getToken(), "Expected token does not match the actual token");
 
 		// Verifications
 		verify(userService).login(loginDTO);
