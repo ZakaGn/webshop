@@ -1,8 +1,8 @@
-import './Login.css'
+import 'components/user/Login.css'
 import React, {useState} from 'react'
 import {toast} from 'react-toastify'
 import {useNavigate} from 'react-router-dom'
-import {api} from "../utils/api"
+import {userService} from "services/UserService"
 
 const Login = () => {
 	const [formData, setFormData] = useState({email: '', password: ''})
@@ -12,35 +12,25 @@ const Login = () => {
 	const handleChange = (e) => {
 		const {name, value} = e.target
 		setFormData(prevState => ({...prevState, [name]: value}))
-		if(formErrors[name]){
-			setFormErrors(prevErrors => ({...prevErrors, [name]: ''}))
-		}
+		if(formErrors[name]){setFormErrors(prevErrors => ({...prevErrors, [name]: ''}))}
 	}
 
 	const handleSubmit = async(e) => {
 		e.preventDefault()
-		let hasError = false
-		let errors = {}
+		const {email, password} = formData
 
-		if(!formData.email){
-			errors.email = "Email is required"
-			hasError = true
-		}
-		if(!formData.password){
-			errors.password = "Password is required"
-			hasError = true
-		}else if(formData.password.length < 3){
-			errors.password = "Password must be longer than 2 characters";
-			hasError = true;
+		if(!email){
+			setFormErrors(prev => ({...prev, email: "Email is required"}))
+			return
 		}
 
-		if(hasError){
-			setFormErrors(errors)
+		if(!password || password.length < 3){
+			setFormErrors(prev => ({...prev, password: "Password must be longer than 2 characters"}))
 			return
 		}
 
 		try{
-			await api.login(formData.email, formData.password)
+			await userService.login(email, password)
 			toast.success('Login successful!')
 			navigate("/dashboard")
 		}catch(error){

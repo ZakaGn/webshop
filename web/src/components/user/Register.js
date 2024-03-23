@@ -1,65 +1,65 @@
-import './Register.css'
+import 'components/user/Register.css'
 import React, {useState} from 'react'
 import {toast} from 'react-toastify'
 import {useNavigate} from 'react-router-dom'
-import {api} from "../utils/api"
+import {userService} from "services/UserService";
 
 const Register = () => {
 	const [formData, setFormData] = useState({firstName: '', lastName: '', email: '', password: ''})
 	const [formErrors, setFormErrors] = useState({})
 	const navigate = useNavigate()
 
-	const handleChange = (e) => {
-		const {name, value} = e.target
-		setFormData((prevFormData) => ({...prevFormData, [name]: value}))
-		setFormErrors({...formErrors, [name]: ''})
-	}
-
-	const handleSubmit = async(e) => {
-		e.preventDefault()
-		let hasError = false
+	const validateForm = () => {
 		let errors = {}
+		let formIsValid = true
 
 		if(!formData.firstName){
 			errors.firstName = "First name is required"
-			hasError = true
+			formIsValid = false
 		}else if(formData.firstName.length < 3){
 			errors.firstName = "First name must be longer than 2 characters"
-			hasError = true
+			formIsValid = false
 		}
 
 		if(!formData.lastName){
 			errors.lastName = "Last name is required"
-			hasError = true
+			formIsValid = false
 		}else if(formData.lastName.length < 3){
 			errors.lastName = "Last name must be longer than 2 characters"
-			hasError = true
+			formIsValid = false
 		}
 
-		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 		if(!formData.email){
 			errors.email = "Email is required"
-			hasError = true
-		}else if(!emailRegex.test(formData.email)){
-			errors.email = "Invalid email format"
-			hasError = true
+			formIsValid = false
+		}else if(!/\S+@\S+\.\S+/.test(formData.email)){
+			errors.email = "Email address is invalid"
+			formIsValid = false
 		}
 
 		if(!formData.password){
 			errors.password = "Password is required"
-			hasError = true
-		}else if(formData.password.length < 3){
-			errors.password = "Password must be longer than 2 characters"
-			hasError = true
+			formIsValid = false
+		}else if(formData.password.length < 6){
+			errors.password = "Password must be 6 characters or more"
+			formIsValid = false
 		}
 
-		if(hasError){
-			setFormErrors(errors)
-			return
-		}
+		setFormErrors(errors)
+		return formIsValid
+	}
+
+	const handleChange = (e) => {
+		const {name, value} = e.target
+		setFormData(prevFormData => ({...prevFormData, [name]: value}))
+	}
+
+	const handleSubmit = async(e) => {
+		e.preventDefault()
+		if(!validateForm()) return
 
 		try{
-			await api.register(formData)
+			await userService.register(formData)
 			toast.success('Registration successful! Please login.')
 			navigate("/login")
 		}catch(error){

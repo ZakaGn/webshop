@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import {toast} from 'react-toastify'
-import {api} from '../utils/api'
-import './Dashboard.css'
-import {useNavigate} from "react-router-dom";
+import {api} from 'utils/api'
+import 'components/Dashboard.css'
+import {useNavigate} from "react-router-dom"
 
 const Dashboard = () => {
 	const [userInfo, setUserInfo] = useState(null)
@@ -14,10 +14,11 @@ const Dashboard = () => {
 				const data = await api.fetchUserData()
 				setUserInfo(data)
 			}catch(error){
-				toast.error('Error fetching user information')
+				const errorMessage = error.response?.data?.message || 'Error fetching user information'
+				toast.error(errorMessage)
+				console.error(error)
 			}
 		}
-
 		fetchUserInfo()
 	}, [])
 

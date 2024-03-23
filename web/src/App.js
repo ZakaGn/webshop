@@ -1,27 +1,12 @@
 import React from 'react'
-import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
-import './App.css'
-import Home from './components/Home'
-import Login from './components/Login'
-import Register from './components/Register'
-import Dashboard from './components/Dashboard'
-import Navbar from './components/Navbar'
-import {ToastContainer} from "react-toastify";
-import ProfileEdit from "./components/ProfileEdit";
+import 'App.css'
+import {ToastContainer} from "react-toastify"
+import AppRouter from 'Router'
 
-function App(){
+function App() {
 	return (
-		<Router>
-			<div className="App">
-				<Navbar/>
-				<Routes>
-					<Route path="/" element={<Home/>}/>
-					<Route path="/login" element={<Login/>}/>
-					<Route path="/register" element={<Register/>}/>
-					<Route path="/dashboard" element={<Dashboard/>}/>
-					<Route path="/edit-profile" element={<ProfileEdit />} />
-				</Routes>
-			</div>
+		<div className="App">
+			<AppRouter />
 			<ToastContainer
 				position="top-center"
 				autoClose={5000}
@@ -33,7 +18,7 @@ function App(){
 				pauseOnHover
 				theme="colored"
 			/>
-		</Router>
+		</div>
 	)
 }
 

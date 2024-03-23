@@ -50,11 +50,12 @@ class UserControllerTest{
 	void loginUser_Successful(){
 		LoginDTO loginDTO = new LoginDTO("john@example.com", "password");
 		String expectedToken = "jwtToken";
-		TokenDTO tokenDTO = new TokenDTO(expectedToken);
+		String expectedRole = "CLIENT";
+		LoginResponseDTO expectedLogin = new LoginResponseDTO(expectedToken, expectedRole);
 
-		when(userService.login(loginDTO)).thenReturn(expectedToken);
+		when(userService.login(loginDTO)).thenReturn(expectedLogin);
 
-		ResponseEntity<TokenDTO> response = userController.loginUser(loginDTO);
+		ResponseEntity<LoginResponseDTO> response = userController.loginUser(loginDTO);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(expectedToken, Objects.requireNonNull(response.getBody()).getToken(), "Expected token does not match the actual token");

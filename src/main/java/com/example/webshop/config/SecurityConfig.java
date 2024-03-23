@@ -40,7 +40,12 @@ public class SecurityConfig{
 			.cors(Customizer.withDefaults())
 			.authorizeHttpRequests(auth -> auth
 				.requestMatchers(POST, "/user/login", "/user/register").permitAll()
-				.requestMatchers(GET, "/user/me").hasAnyAuthority("CLIENT", "EMPLOYER", "MANAGER")
+				.requestMatchers(GET, "/user/data").hasAnyAuthority("CLIENT", "EMPLOYER", "MANAGER")
+				.requestMatchers(POST, "/user/update").hasAnyAuthority("CLIENT", "EMPLOYER", "MANAGER")
+				.requestMatchers(GET, "/products/category", "/products/category/{id}").permitAll()
+				.requestMatchers(POST, "/products/category").hasAnyAuthority("EMPLOYER", "MANAGER")
+				.requestMatchers(PUT, "/products/category/{id}").hasAnyAuthority("EMPLOYER", "MANAGER")
+				.requestMatchers(DELETE, "/products/category/{id}").hasAnyAuthority("EMPLOYER", "MANAGER")
 				.anyRequest().authenticated()
 			)
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

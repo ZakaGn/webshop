@@ -1,9 +1,6 @@
 package com.example.webshop.service;
 
-import com.example.webshop.dto.LoginDTO;
-import com.example.webshop.dto.RegisterDTO;
-import com.example.webshop.dto.UpdateUserDTO;
-import com.example.webshop.dto.UserDTO;
+import com.example.webshop.dto.*;
 import com.example.webshop.exception.apiException.badRequestException.UserAlreadyExistsException;
 import com.example.webshop.exception.apiException.badRequestException.UserNotFoundException;
 import com.example.webshop.model.User;
@@ -15,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,10 +43,15 @@ public class UserService{
 		return new UserDTO(savedUser);
 	}
 
-	public String login(LoginDTO loginDTO){
+	public LoginResponseDTO login(LoginDTO loginDTO){
 		Authentication authentication = authenticationManager.authenticate(
-			new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
-		return jwtTokenProvider.generateToken(authentication);
+			new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword())
+		);
+		String token = jwtTokenProvider.generateToken(authentication);
+		String email = authentication.getName();
+		User user = userRepository.findUserByCredentialsEmail(email).orElseThrow(UserNotFoundException::new);
+		String role = user.getRole().toString();
+		return new LoginResponseDTO(token, role);
 	}
 
 	public UserDTO getUserDataByEmail(String email){

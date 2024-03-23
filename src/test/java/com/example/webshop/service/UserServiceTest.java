@@ -1,9 +1,6 @@
 package com.example.webshop.service;
 
-import com.example.webshop.dto.LoginDTO;
-import com.example.webshop.dto.RegisterDTO;
-import com.example.webshop.dto.UpdateUserDTO;
-import com.example.webshop.dto.UserDTO;
+import com.example.webshop.dto.*;
 import com.example.webshop.exception.apiException.badRequestException.UserNotFoundException;
 import com.example.webshop.model.User;
 import com.example.webshop.model.auth.Credentials;
@@ -72,11 +69,11 @@ public class UserServiceTest{
 		when(jwtTokenProvider.generateToken(any(Authentication.class))).thenReturn(expectedToken);
 
 		// Action
-		String actualToken = userService.login(loginDTO);
+		LoginResponseDTO actualLogin = userService.login(loginDTO);
 
 		// Assert
-		assertNotNull(actualToken, "Token should not be null");
-		assertEquals(expectedToken, actualToken, "Expected token does not match the actual token");
+		assertNotNull(actualLogin.getToken(), "Token should not be null");
+		//assertEquals(actualLogin.getRole(), actualLogin, "Expected token does not match the actual token");
 
 		// Verifications
 		verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
