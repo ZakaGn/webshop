@@ -2,7 +2,7 @@ import './Dashboard.css'
 import React, {useEffect, useState} from 'react'
 import {toast} from 'react-toastify'
 import {useNavigate} from 'react-router-dom'
-import {userService} from '../../services/UserService'
+import {userService} from 'services/UserService'
 
 const Dashboard = () => {
 	const [userInfo, setUserInfo] = useState(null)

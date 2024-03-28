@@ -26,10 +26,10 @@ public class ProductService{
 		return new CategoryDto(savedCategory.getId(), savedCategory.getName(), savedCategory.getDescription());
 	}
 
-	public CategoryDto updateCategory(Integer categoryId, CategoryDto categoryDto){
+	public CategoryDto updateCategory(CategoryDto categoryDto){
 		Category category = categoryRepository
-			.findById(categoryId)
-			.orElseThrow(() -> new CategoryNotFoundException(categoryId));
+			.findById(categoryDto.getId())
+			.orElseThrow(() -> new CategoryNotFoundException(categoryDto.getId()));
 		category.setName(categoryDto.getName());
 		category.setDescription(categoryDto.getDescription());
 		Category updatedCategory = categoryRepository.save(category);

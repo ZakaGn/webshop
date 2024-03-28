@@ -38,17 +38,15 @@ public class ProductController{
 		return ResponseEntity.ok(productService.getCategoryById(id));
 	}
 
-	@PutMapping("/category/{id}")
-	@PreAuthorize("hasRole('EMPLOYER')")
-	public ResponseEntity<CategoryDto> updateCategory(
-		@PathVariable Integer id, @Valid @RequestBody CategoryDto categoryDto
-	){
-		CategoryDto updatedCategory = productService.updateCategory(id, categoryDto);
+	@PutMapping("/category")
+	@PreAuthorize("hasAuthority('EMPLOYER')")
+	public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto){
+		CategoryDto updatedCategory = productService.updateCategory(categoryDto);
 		return ResponseEntity.ok(updatedCategory);
 	}
 
 	@DeleteMapping("/category/{id}")
-	@PreAuthorize("hasRole('EMPLOYER')")
+	@PreAuthorize("hasAuthority('EMPLOYER')")
 	public ResponseEntity<Void> deleteCategory(@PathVariable Integer id){
 		productService.deleteCategory(id);
 		return ResponseEntity.noContent().build();

@@ -1,8 +1,8 @@
 import './Navbar.css'
 import React, {useEffect, useState} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
-import auth from "../../utils/auth"
-import {userService} from "../../services/UserService"
+import auth from "utils/auth"
+import {userService} from "services/UserService"
 
 const Navbar = () => {
 	const navigate = useNavigate()

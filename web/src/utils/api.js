@@ -43,15 +43,15 @@ export const api = {
 		return response.data
 	},
 
-	updateCategory: async(id, category) => {
-		console.log("updateCategory")
-		const response = await axiosInstance.put(`/products/category'/${id}`, category)
+	updateCategory: async(category) => {
+		console.log("updateCategory", category)
+		const response = await axiosInstance.put(`/products/category`, category)
 		return response.data
 	},
 
 	deleteCategory: async(id) => {
 		console.log("deleteCategory")
-		const response = await axiosInstance.delete(`/products/category'/${id}`)
+		const response = await axiosInstance.delete(`/products/category/${id}`)
 		return response.data
 	}
 }

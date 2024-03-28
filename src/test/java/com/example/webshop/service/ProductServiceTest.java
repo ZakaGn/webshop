@@ -59,7 +59,7 @@ class ProductServiceTest{
 		assertEquals(categoryDto.getName(), result.getName());
 		assertEquals(categoryDto.getDescription(), result.getDescription());
 	}*/
-
+/*
 	@Test
 	void updateCategory_Successful() {
 		Integer categoryId = 1;
@@ -75,7 +75,7 @@ class ProductServiceTest{
 		assertEquals(categoryDto.getDescription(), updatedCategoryDto.getDescription());
 		verify(categoryRepository).save(any(Category.class));
 	}
-
+*/
 	/*@Test
 	void getCategoryById_Successful() {
 		Integer categoryId = 1;

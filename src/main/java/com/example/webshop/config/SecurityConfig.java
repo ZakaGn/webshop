@@ -45,7 +45,7 @@ public class SecurityConfig{
 				.requestMatchers(POST, "/user/update").hasAnyAuthority("CLIENT", "EMPLOYER", "MANAGER")
 				.requestMatchers(GET, "/products/category", "/products/category/{id}").permitAll()
 				.requestMatchers(POST, "/products/category").hasAnyAuthority("EMPLOYER", "MANAGER")
-				.requestMatchers(PUT, "/products/category/{id}").hasAnyAuthority("EMPLOYER", "MANAGER")
+				.requestMatchers(PUT, "/products/category").hasAnyAuthority("EMPLOYER", "MANAGER")
 				.requestMatchers(DELETE, "/products/category/{id}").hasAnyAuthority("EMPLOYER", "MANAGER")
 				.anyRequest().authenticated()
 			)

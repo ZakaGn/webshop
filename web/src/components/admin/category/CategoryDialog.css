@@ -1,0 +1,78 @@
+#category-dialog{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
+}
+
+#category-dialog .dialog-content{
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 5px;
+	max-width: 400px;
+	width: 90%;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	display: flex;
+	flex-direction: column;
+	margin: auto;
+}
+
+#category-dialog .dialog-content label{
+	display: block;
+	margin-bottom: 5px;
+	font-weight: bold;
+}
+
+#category-dialog .dialog-content input[type="text"]{
+	width: calc(100% - 20px);
+	padding: 10px;
+	margin-bottom: 20px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+#category-dialog .dialog-actions{
+	text-align: right;
+	padding-top: 10px;
+}
+
+#category-dialog .dialog-actions button{
+	padding: 8px 16px;
+	margin-left: 10px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 14px;
+	transition: background-color 0.3s ease;
+}
+
+#category-dialog .dialog-actions button:first-child{
+	background-color: #4CAF50;
+	color: white;
+}
+
+#category-dialog .dialog-actions button:nth-child(2){
+	background-color: #f44336;
+	color: white;
+}
+
+#category-dialog .dialog-actions button:last-child{
+	background-color: #777;
+	color: white;
+}
+
+#category-dialog .dialog-actions button:hover{
+	opacity: 0.9;
+}
+
+@media screen and (max-width: 600px){
+	#category-dialog .dialog-content{
+		width: 80%;
+	}
+}
