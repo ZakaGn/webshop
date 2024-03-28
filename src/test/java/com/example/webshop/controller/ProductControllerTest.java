@@ -1,6 +1,7 @@
 package com.example.webshop.controller;
 
 import com.example.webshop.dto.CategoryDto;
+import com.example.webshop.dto.ProductDTO;
 import com.example.webshop.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,21 +11,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Collections;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 class ProductControllerTest {
@@ -69,21 +66,6 @@ class ProductControllerTest {
 			.andExpect(content().json(new ObjectMapper().writeValueAsString(savedCategoryDto)));
 	}
 
-	/*
-	@Test
-	void updateCategory_Success() throws Exception {
-		CategoryDto categoryDto = new CategoryDto(1, "Electronics", "Updated Description");
-		given(productService.updateCategory(eq(1), any(CategoryDto.class))).willReturn(categoryDto);
-
-		mockMvc
-			.perform(put("/products/category/1")
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(new ObjectMapper().writeValueAsString(categoryDto)))
-			.andExpect(status().isOk())
-			.andExpect(content().json(new ObjectMapper().writeValueAsString(categoryDto)));
-	}
-	*/
-
 	@Test
 	void deleteCategory_Success() throws Exception {
 		doNothing().when(productService).deleteCategory(1);
@@ -96,4 +78,64 @@ class ProductControllerTest {
 		verify(productService, times(1)).deleteCategory(1);
 	}
 
+	@Test
+	void getAllProductsTest() throws Exception {
+		ProductDTO productDto = new ProductDTO(); // Initialize your ProductDTO
+		// Mock service method
+		given(productService.getAllProducts()).willReturn(Collections.singletonList(productDto));
+
+		mockMvc.perform(get("/products")
+			                .contentType(MediaType.APPLICATION_JSON))
+		       .andExpect(status().isOk())
+		       .andExpect(jsonPath("$", hasSize(1)));
+	}
+
+	@Test
+	void createProductTest() throws Exception {
+		ProductDTO productDto = new ProductDTO(); // Initialize with test data
+		ProductDTO savedProductDto = new ProductDTO(); // Initialize with expected data
+
+		given(productService.createProduct(any(ProductDTO.class))).willReturn(savedProductDto);
+
+		mockMvc.perform(post("/products")
+			                .contentType(MediaType.APPLICATION_JSON)
+			                .content(new ObjectMapper().writeValueAsString(productDto)))
+		       .andExpect(status().isCreated());
+	}
+
+	@Test
+	void getProductByIdTest() throws Exception {
+		Integer productId = 1;
+		ProductDTO productDto = new ProductDTO(); // Initialize with expected data
+
+		given(productService.getProductById(productId)).willReturn(productDto);
+
+		mockMvc.perform(get("/products/{productId}", productId).contentType(MediaType.APPLICATION_JSON))
+	       .andExpect(status().isOk());
+	}
+
+	@Test
+	void updateProductTest() throws Exception {
+		ProductDTO productDto = new ProductDTO(); // Initialize with test data
+		ProductDTO updatedProductDto = new ProductDTO(); // Initialize with expected updated data
+
+		given(productService.updateProduct(any(ProductDTO.class))).willReturn(updatedProductDto);
+
+		mockMvc.perform(put("/products")
+			                .contentType(MediaType.APPLICATION_JSON)
+			                .content(new ObjectMapper().writeValueAsString(productDto)))
+		       .andExpect(status().isOk());
+	}
+
+	@Test
+	void deleteProductTest() throws Exception {
+		Integer productId = 1;
+		doNothing().when(productService).deleteProduct(productId);
+
+		mockMvc.perform(delete("/products/{productId}", productId)
+			                .contentType(MediaType.APPLICATION_JSON))
+		       .andExpect(status().isNoContent());
+
+		verify(productService, times(1)).deleteProduct(productId);
+	}
 }
