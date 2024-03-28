@@ -43,10 +43,17 @@ public class SecurityConfig{
 				.requestMatchers(POST, "/user/login", "/user/register").permitAll()
 				.requestMatchers(GET, "/user/data").hasAnyAuthority("CLIENT", "EMPLOYER", "MANAGER")
 				.requestMatchers(POST, "/user/update").hasAnyAuthority("CLIENT", "EMPLOYER", "MANAGER")
+
 				.requestMatchers(GET, "/products/category", "/products/category/{id}").permitAll()
-				.requestMatchers(POST, "/products/category").hasAnyAuthority("EMPLOYER", "MANAGER")
-				.requestMatchers(PUT, "/products/category").hasAnyAuthority("EMPLOYER", "MANAGER")
-				.requestMatchers(DELETE, "/products/category/{id}").hasAnyAuthority("EMPLOYER", "MANAGER")
+				.requestMatchers(POST, "/products/category").hasAnyAuthority("EMPLOYER")
+				.requestMatchers(PUT, "/products/category").hasAnyAuthority("EMPLOYER")
+				.requestMatchers(DELETE, "/products/category/{id}").hasAnyAuthority("EMPLOYER")
+
+				.requestMatchers(GET, "/products", "/products/{id}").permitAll()
+				.requestMatchers(POST, "/products").hasAnyAuthority("EMPLOYER")
+				.requestMatchers(PUT, "/products").hasAnyAuthority("EMPLOYER")
+				.requestMatchers(DELETE, "/products/{id}").hasAnyAuthority("EMPLOYER")
+
 				.anyRequest().authenticated()
 			)
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

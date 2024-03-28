@@ -39,7 +39,7 @@
 	background-color: #0056b3;
 }
 
-#admin-categories div{
+#admin-categories .category-item{
 	background-color: white;
 	padding: 10px;
 	margin-bottom: 8px;
@@ -49,13 +49,13 @@
 	align-items: center;
 }
 
-#admin-categories div button{
+#admin-categories .category-item button{
 	padding: 5px 10px;
 	background-color: #6c757d;
 	border-radius: 4px;
 	color: white;
 }
 
-#admin-categories div button:hover{
+#admin-categories .category-item button:hover{
 	background-color: #5a6268;
 }

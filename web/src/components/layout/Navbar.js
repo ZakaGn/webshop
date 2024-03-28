@@ -30,7 +30,12 @@ const Navbar = () => {
 				{isAuthenticated && (
 					<>
 						<li><Link to="/dashboard">Dashboard</Link></li>
-						{isEmployer && <li><Link to="/admin/categories">Manage Categories</Link></li>}
+						{isEmployer &&
+							<>
+								<li><Link to="/admin/categories">Manage Categories</Link></li>
+								<li><Link to="/admin/products">Manage Products</Link></li>
+							</>
+						}
 					</>
 				)}
 				<li style={{marginLeft: 'auto'}}>

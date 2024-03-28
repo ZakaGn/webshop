@@ -53,7 +53,33 @@ export const api = {
 		console.log("deleteCategory")
 		const response = await axiosInstance.delete(`/products/category/${id}`)
 		return response.data
+	},
+
+	fetchProducts: async() => {
+		console.log("fetchProducts")
+		const response = await axiosInstance.get('/products')
+		console.log("response:", response)
+		return response.data
+	},
+
+	addProduct: async(product) => {
+		console.log("addProduct")
+		const response = await axiosInstance.post('/products', product)
+		return response.data
+	},
+
+	updateProduct: async(product) => {
+		console.log("updateProduct", product)
+		const response = await axiosInstance.put(`/products`, product)
+		return response.data
+	},
+
+	deleteProduct: async(id) => {
+		console.log("deleteProduct")
+		const response = await axiosInstance.delete(`/products/${id}`)
+		return response.data
 	}
+
 }
 
 export default api

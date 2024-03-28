@@ -7,6 +7,7 @@ import Dashboard from 'components/user/Dashboard'
 import ProfileEdit from 'components/user/ProfileEdit'
 import Navbar from "components/layout/Navbar"
 import AdminCategories from "./components/admin/category/AdminCategories"
+import AdminProducts from "./components/admin/product/AdminProducts";
 
 const AppRouter = () => {
 	return (
@@ -19,6 +20,7 @@ const AppRouter = () => {
 				<Route path="/dashboard" element={<Dashboard/>}/>
 				<Route path="/edit-profile" element={<ProfileEdit />} />
 				<Route path="/admin/categories" element={<AdminCategories />} />
+				<Route path="/admin/products" element={<AdminProducts />} />
 			</Routes>
 		</Router>
 	)
