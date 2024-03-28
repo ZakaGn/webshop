@@ -7,4 +7,5 @@ export const userService = {
 	logout: () => {auth.removeToken();auth.removeRole()},
 	fetchUser : async() => api.fetchUserData(),
 	updateUser : async(userData) => api.updateUser(userData),
+	getEmail : () => auth.getEmail(),
 }

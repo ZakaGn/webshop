@@ -2,7 +2,7 @@ import './Dashboard.css'
 import React, {useEffect, useState} from 'react'
 import {toast} from 'react-toastify'
 import {useNavigate} from 'react-router-dom'
-import {userService} from 'services/UserService'
+import {userService} from '../../services/UserService'
 
 const Dashboard = () => {
 	const [userInfo, setUserInfo] = useState(null)
@@ -45,7 +45,7 @@ const Dashboard = () => {
 	}
 
 	return (
-		<div className="dashboard-container">
+		<div id={"dashboard"} className="dashboard-container">
 			<h1>Welcome back, {userInfo.firstName}!</h1>
 			<div className="user-info">
 				<p><strong>First Name:</strong> {userInfo.firstName}</p>

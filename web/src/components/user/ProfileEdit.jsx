@@ -69,7 +69,7 @@ const ProfileEdit = () => {
 	}
 
 	return (
-		<div className="profile-edit-container">
+		<div id={"profile-edit"} className="profile-edit-container">
 			<h2>Edit Profile</h2>
 			<form onSubmit={handleSubmit}>
 				<div className="form-group">

@@ -1,4 +1,4 @@
-.dashboard-container{
+#dashboard{
 	max-width: 600px;
 	margin: 20px auto;
 	padding: 20px;
@@ -7,18 +7,18 @@
 	background-color: #f9f9f9;
 }
 
-.dashboard-container h1{
+#dashboard h1{
 	color: #333;
 	text-align: center;
 }
 
-.dashboard-loading{
+#dashboard .dashboard-loading{
 	text-align: center;
 	font-size: 20px;
 	margin-top: 50px;
 }
 
-.user-info{
+#dashboard .user-info{
 	background-color: #fff;
 	padding: 15px;
 	margin-bottom: 20px;
@@ -26,16 +26,16 @@
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.user-info p{
+#dashboard .user-info p{
 	margin: 10px 0;
 	font-size: 16px;
 }
 
-.user-info p strong{
+#dashboard .user-info p strong{
 	margin-right: 10px;
 }
 
-button[type="button"].edit-profile{
+#dashboard button[type="button"].edit-profile{
 	width: 100%;
 	padding: 10px;
 	background-color: #4CAF50;
@@ -47,10 +47,10 @@ button[type="button"].edit-profile{
 	margin-top: 10px;
 }
 
-button[type="button"].edit-profile:hover{
+#dashboard button[type="button"].edit-profile:hover{
 	background-color: #45a049;
 }
 
-button[type="button"].edit-profile:active{
+#dashboard button[type="button"].edit-profile:active{
 	background-color: #397d3f;
 }

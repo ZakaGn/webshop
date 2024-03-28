@@ -3,9 +3,9 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import Home from 'components/Home'
 import Login from './components/user/Login'
 import Register from './components/user/Register'
-import Dashboard from 'components/Dashboard'
+import Dashboard from './components/user/Dashboard'
 import ProfileEdit from './components/user/ProfileEdit'
-import Navbar from "./components/Navbar";
+import Navbar from "./components/layout/Navbar";
 import AdminCategories from "./components/admin/AdminCategories";
 
 const AppRouter = () => {

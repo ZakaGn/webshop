@@ -1,4 +1,4 @@
-.register-container {
+#register{
 	max-width: 400px;
 	margin: 5% auto;
 	padding: 20px;
@@ -7,23 +7,23 @@
 	background-color: #f9f9f9;
 }
 
-.register-container h2 {
+#register h2{
 	text-align: center;
 	color: #333;
 	margin-bottom: 20px;
 }
 
-.form-group {
+#register .form-group{
 	margin-bottom: 15px;
 }
 
-.form-group label {
+#register .form-group label{
 	display: block;
 	color: #666;
 	margin-bottom: 5px;
 }
 
-.form-group input {
+#register .form-group input{
 	width: 100%;
 	padding: 10px;
 	border: 1px solid #ddd;
@@ -31,7 +31,7 @@
 	box-sizing: border-box;
 }
 
-button[type="submit"] {
+#register button[type="submit"]{
 	width: 100%;
 	padding: 10px;
 	background-color: #28a745;
@@ -42,12 +42,12 @@ button[type="submit"] {
 	font-size: 16px;
 }
 
-button[type="submit"]:hover {
+#register button[type="submit"]:hover{
 	background-color: #218838;
 }
 
-@media (max-width: 600px) {
-	.register-container {
+@media (max-width: 600px){
+	#register{
 		width: 85%;
 		margin-top: 20%;
 	}
