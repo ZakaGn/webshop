@@ -5,4 +5,8 @@ public class CategoryNotFoundException extends BadRequestException{
 		super("Category with id " + id + " not found");
 	}
 
+	public CategoryNotFoundException(){
+		super("Category not found");
+	}
+
 }

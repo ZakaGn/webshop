@@ -1,6 +1,7 @@
 package com.example.webshop.controller;
 
 import com.example.webshop.dto.CategoryDto;
+import com.example.webshop.dto.ProductDTO;
 import com.example.webshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,6 +50,39 @@ public class ProductController{
 	@PreAuthorize("hasAuthority('EMPLOYER')")
 	public ResponseEntity<Void> deleteCategory(@PathVariable Integer id){
 		productService.deleteCategory(id);
+		return ResponseEntity.noContent().build();
+	}
+
+	@GetMapping
+	public ResponseEntity<List<ProductDTO>> getAllProducts(){
+		List<ProductDTO> products = productService.getAllProducts();
+		return ResponseEntity.ok(products);
+	}
+
+	@PostMapping
+	@PreAuthorize("hasAuthority('EMPLOYER')")
+	public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO ProductDTO){
+		ProductDTO createdProduct = productService.createProduct(ProductDTO);
+		return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
+	}
+
+	@GetMapping("/{productId}")
+	public ResponseEntity<ProductDTO> getProductById(@PathVariable Integer productId){
+		ProductDTO product = productService.getProductById(productId);
+		return ResponseEntity.ok(product);
+	}
+
+	@PutMapping
+	@PreAuthorize("hasAuthority('EMPLOYER')")
+	public ResponseEntity<ProductDTO> updateProduct(@Valid @RequestBody ProductDTO ProductDTO){
+		ProductDTO updatedProduct = productService.updateProduct(ProductDTO);
+		return ResponseEntity.ok(updatedProduct);
+	}
+
+	@DeleteMapping("/{productId}")
+	@PreAuthorize("hasAuthority('EMPLOYER')")
+	public ResponseEntity<Void> deleteProduct(@PathVariable Integer productId){
+		productService.deleteProduct(productId);
 		return ResponseEntity.noContent().build();
 	}
 
