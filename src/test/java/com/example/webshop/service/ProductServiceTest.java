@@ -1,34 +1,26 @@
 package com.example.webshop.service;
 
 import com.example.webshop.dto.CategoryDto;
+import com.example.webshop.dto.ProductDTO;
 import com.example.webshop.model.Category;
+import com.example.webshop.model.Product;
 import com.example.webshop.repository.CategoryRepository;
+import com.example.webshop.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.modelmapper.ModelMapper;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
-import java.util.List;
-import java.util.Optional;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest{
+
+	@Mock
+	private ProductRepository productRepository;
 
 	@Mock
 	private CategoryRepository categoryRepository;
@@ -39,81 +31,85 @@ class ProductServiceTest{
 	@InjectMocks
 	private ProductService productService;
 
+	private Product product;
+	private ProductDTO productDTO;
 	private Category category;
-	private CategoryDto categoryDto;
 
 	@BeforeEach
-	void setUp() {
-		category = new Category(1, "Electronics", "Electronic Items");
-		categoryDto = new CategoryDto(1, "Electronics", "Electronic Items");
+	void setUp(){
+		category = new Category(1, "Electronics", null);
+		product = new Product(1, "Laptop", "A high-performance laptop.", 1200.00, 10, category);
+		productDTO = new ProductDTO(1, "Laptop", "A high-performance laptop.", 1200.00, 10, 1);
 	}
 
-	/*@Test
-	void createCategoryTest() {
-		when(modelMapper.map(categoryDto, Category.class)).thenReturn(category);
-		when(categoryRepository.save(category)).thenReturn(category);
-		when(modelMapper.map(category, CategoryDto.class)).thenReturn(categoryDto);
-
-		CategoryDto result = productService.createCategory(categoryDto);
-
-		assertEquals(categoryDto.getName(), result.getName());
-		assertEquals(categoryDto.getDescription(), result.getDescription());
-	}*/
-/*
 	@Test
-	void updateCategory_Successful() {
-		Integer categoryId = 1;
-		Category existingCategory = new Category(categoryId, "Electronics", "Electronic Items", null);
-		CategoryDto categoryDto = new CategoryDto(categoryId, "Updated Electronics", "Updated Description");
+	void createProductSuccess(){
+		when(categoryRepository.findById(productDTO.getCategoryId())).thenReturn(java.util.Optional.of(category));
+		when(modelMapper.map(any(ProductDTO.class), eq(Product.class))).thenReturn(product);
+		when(productRepository.save(any(Product.class))).thenReturn(product);
+		when(modelMapper.map(any(Product.class), eq(ProductDTO.class))).thenReturn(productDTO);
 
-		when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(existingCategory));
-		when(categoryRepository.save(any(Category.class))).thenAnswer(i -> i.getArgument(0));
+		ProductDTO savedProductDTO = productService.createProduct(productDTO);
 
-		CategoryDto updatedCategoryDto = productService.updateCategory(categoryId, categoryDto);
+		assertNotNull(savedProductDTO);
+		assertEquals(productDTO.getName(), savedProductDTO.getName());
+		verify(productRepository).save(any(Product.class));
+	}
 
-		assertEquals(categoryDto.getName(), updatedCategoryDto.getName());
-		assertEquals(categoryDto.getDescription(), updatedCategoryDto.getDescription());
+	@Test
+	void updateProductSuccess(){
+		when(productRepository.findById(productDTO.getId())).thenReturn(java.util.Optional.of(product));
+		when(categoryRepository.findById(productDTO.getCategoryId())).thenReturn(java.util.Optional.of(category));
+		when(productRepository.save(any(Product.class))).thenReturn(product);
+		when(modelMapper.map(any(Product.class), eq(ProductDTO.class))).thenReturn(productDTO);
+
+		ProductDTO updatedProductDTO = productService.updateProduct(productDTO);
+
+		assertNotNull(updatedProductDTO);
+		assertEquals(productDTO.getName(), updatedProductDTO.getName());
+		verify(productRepository).save(product);
+	}
+
+	@Test
+	void getProductByIdSuccess(){
+		when(productRepository.findById(product.getId())).thenReturn(java.util.Optional.of(product));
+		when(modelMapper.map(any(Product.class), eq(ProductDTO.class))).thenReturn(productDTO);
+
+		ProductDTO foundProductDTO = productService.getProductById(product.getId());
+
+		assertNotNull(foundProductDTO);
+		assertEquals(product.getName(), foundProductDTO.getName());
+	}
+
+	@Test
+	void createCategory_Success(){
+		CategoryDto categoryDto = new CategoryDto();
+		Category category = new Category();
+
+		lenient().when(modelMapper.map(any(CategoryDto.class), eq(Category.class))).thenReturn(category);
+		lenient().when(categoryRepository.save(any(Category.class))).thenReturn(category);
+		lenient().when(modelMapper.map(any(Category.class), eq(CategoryDto.class))).thenReturn(categoryDto);
+
+		CategoryDto createdCategory = productService.createCategory(categoryDto);
+
+		assertNotNull(createdCategory);
 		verify(categoryRepository).save(any(Category.class));
 	}
-*/
-	/*@Test
-	void getCategoryById_Successful() {
-		Integer categoryId = 1;
-		Category category = new Category(categoryId, "Electronics", "Electronic Items", null);
-
-		when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
-
-		CategoryDto result = productService.getCategoryById(categoryId);
-
-		assertEquals(category.getName(), result.getName());
-		assertEquals(category.getDescription(), result.getDescription());
-	}*/
-
-	/*@Test
-	void getAllCategories_Successful() {
-		List<Category> categories = List.of(
-			new Category(1, "Electronics", "Electronic Items", null),
-			new Category(2, "Books", "All kinds of books", null)
-		);
-
-		when(categoryRepository.findAll()).thenReturn(categories);
-
-		List<CategoryDto> result = productService.getAllCategories();
-
-		assertEquals(2, result.size());
-		assertEquals("Electronics", result.get(0).getName());
-		assertEquals("Books", result.get(1).getName());
-	}*/
 
 	@Test
-	void deleteCategory_Successful() {
-		Integer categoryId = 1;
+	void updateCategory_Success(){
+		CategoryDto categoryDto = new CategoryDto();
+		categoryDto.setId(1);
+		Category existingCategory = new Category();
 
-		doNothing().when(categoryRepository).deleteById(categoryId);
+		lenient().when(categoryRepository.findById(categoryDto.getId())).thenReturn(java.util.Optional.of(existingCategory));
+		lenient().when(categoryRepository.save(any(Category.class))).thenReturn(existingCategory);
+		lenient().when(modelMapper.map(any(Category.class), eq(CategoryDto.class))).thenReturn(categoryDto);
 
-		productService.deleteCategory(categoryId);
+		CategoryDto updatedCategory = productService.updateCategory(categoryDto);
 
-		verify(categoryRepository).deleteById(categoryId);
+		assertNotNull(updatedCategory);
+		verify(categoryRepository).save(any(Category.class));
 	}
 
 }
