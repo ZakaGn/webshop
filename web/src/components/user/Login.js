@@ -29,13 +29,15 @@ const Login = () => {
 			return
 		}
 
-		try{
-			await userService.login(email, password)
-			toast.success('Login successful!')
-			navigate("/dashboard")
-		}catch(error){
-			toast.error(error.response?.data?.message || 'Failed to log in. Please try again.')
-		}
+		userService
+			.login(email, password)
+			.then(response => {
+				toast.success('Login successful!')
+				navigate("/dashboard")
+			})
+			.catch(error => {
+				toast.error(error.response?.data?.message || 'Failed to log in. Please try again.')
+			})
 	}
 
 	return (

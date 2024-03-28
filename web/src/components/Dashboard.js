@@ -1,33 +1,47 @@
+import './Dashboard.css'
 import React, {useEffect, useState} from 'react'
 import {toast} from 'react-toastify'
-import {api} from 'utils/api'
-import 'components/Dashboard.css'
-import {useNavigate} from "react-router-dom"
+import {useNavigate} from 'react-router-dom'
+import {userService} from 'services/UserService'
 
 const Dashboard = () => {
 	const [userInfo, setUserInfo] = useState(null)
+	const [loading, setLoading] = useState(true)
+	const [error, setError] = useState(null)
 	const navigate = useNavigate()
+	let isMounted = true
 
 	useEffect(() => {
-		const fetchUserInfo = async() => {
-			try{
-				const data = await api.fetchUserData()
-				setUserInfo(data)
-			}catch(error){
-				const errorMessage = error.response?.data?.message || 'Error fetching user information'
-				toast.error(errorMessage)
-				console.error(error)
-			}
-		}
-		fetchUserInfo()
+		if(!isMounted) return
+		fetchUser()
+		return () => {isMounted = false}
 	}, [])
+
+	const fetchUser = () => {
+		userService.fetchUser()
+			.then(data => {
+				setUserInfo(data)
+				setLoading(false)
+			})
+			.catch(error => {
+				const errorMessage = error.response?.data?.message || 'Error fetching user information'
+				userService.logout()
+				toast.error(errorMessage)
+				setError(errorMessage)
+				setLoading(false)
+			})
+	}
 
 	const handleEditProfileClick = () => {
 		navigate('/edit-profile')
 	}
 
-	if(!userInfo){
+	if(loading){
 		return <div className="dashboard-loading">Loading...</div>
+	}
+
+	if(error){
+		return <div className="dashboard-loading">{error}</div>
 	}
 
 	return (
@@ -39,7 +53,7 @@ const Dashboard = () => {
 				<p><strong>Email:</strong> {userInfo.email}</p>
 			</div>
 			<p>This is your personal dashboard where you can manage your account, view orders, and more.</p>
-			<button onClick={handleEditProfileClick}>Edit Profile</button>
+			<button type="button" className="edit-profile" onClick={handleEditProfileClick}>Edit Profile</button>
 		</div>
 	)
 }

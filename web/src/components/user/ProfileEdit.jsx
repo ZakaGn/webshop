@@ -2,7 +2,7 @@ import './ProfileEdit.css'
 import React, {useState, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {toast} from 'react-toastify'
-import {api} from "../../utils/api"
+import {userService} from "services/UserService"
 
 const ProfileEdit = () => {
 	const [profile, setProfile] = useState({firstName: '', lastName: '', email: ''})
@@ -12,7 +12,7 @@ const ProfileEdit = () => {
 
 	useEffect(() => {
 		setLoading(true)
-		api.fetchUserData().then(response => {
+		userService.fetchUser().then(response => {
 			setProfile(response)
 			setLoading(false)
 		}).catch(error => {
@@ -55,10 +55,9 @@ const ProfileEdit = () => {
 			toast.error("Please correct the errors before submitting.")
 			return
 		}
-
 		setLoading(true)
 		try{
-			await api.updateUserProfile(profile)
+			await userService.updateUser(profile)
 			toast.success('Profile updated successfully')
 			navigate('/dashboard')
 		}catch(error){
@@ -89,9 +88,8 @@ const ProfileEdit = () => {
 					<input type="email" id="email" name="email" value={profile.email} onChange={handleChange} required/>
 					{errors.email && <div className="error">{errors.email}</div>}
 				</div>
-				<button type="submit" disabled={loading}>
-					Update Profile
-				</button>
+				<button type="submit" disabled={loading}>Update Profile</button>
+				<button type="button" className={"btn-profile-edit-cancel"} onClick={() => navigate('/dashboard')}>Cancel</button>
 			</form>
 		</div>
 	)
