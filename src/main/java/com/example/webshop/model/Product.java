@@ -16,7 +16,7 @@ public class Product{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "product_id")
-	private Integer id;
+	private Long id;
 
 	@Column(nullable = false, length = 100)
 	private String name;
@@ -25,10 +25,10 @@ public class Product{
 	private String description;
 
 	@Column(nullable = false)
-	private Double price;
+	private float price;
 
 	@Column(nullable = false)
-	private Integer quantity;
+	private int quantity;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "category_id", referencedColumnName = "category_id")

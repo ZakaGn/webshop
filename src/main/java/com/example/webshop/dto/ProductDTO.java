@@ -10,12 +10,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductDTO{
-	private Integer id;
+	private Long id;
 	private String name;
 	private String description;
-	private Double price;
-	private Integer quantity;
-	private Integer categoryId;
+	private float price;
+	private int quantity;
+	private Long categoryId;
 
 	@Override
 	public String toString(){

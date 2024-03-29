@@ -6,8 +6,9 @@ import Register from 'components/user/Register'
 import Dashboard from 'components/user/Dashboard'
 import ProfileEdit from 'components/user/ProfileEdit'
 import Navbar from "components/layout/Navbar"
-import AdminCategories from "./components/admin/category/AdminCategories"
-import AdminProducts from "./components/admin/product/AdminProducts";
+import AdminCategories from "components/admin/category/AdminCategories"
+import AdminProducts from "components/admin/product/AdminProducts"
+import AdminOrders from "components/admin/order/AdminOrders"
 
 const AppRouter = () => {
 	return (
@@ -21,6 +22,7 @@ const AppRouter = () => {
 				<Route path="/edit-profile" element={<ProfileEdit />} />
 				<Route path="/admin/categories" element={<AdminCategories />} />
 				<Route path="/admin/products" element={<AdminProducts />} />
+				<Route path="/admin/orders" element={<AdminOrders />} />
 			</Routes>
 		</Router>
 	)

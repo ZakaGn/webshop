@@ -78,6 +78,41 @@ export const api = {
 		console.log("deleteProduct")
 		const response = await axiosInstance.delete(`/products/${id}`)
 		return response.data
+	},
+
+	fetchOrders: async() => {
+		console.log("fetchOrders")
+		const response = await axiosInstance.get('/orders')
+		console.log("response:", response)
+		return response.data
+	},
+
+	fetchOrderById: async(orderId) => {
+		console.log(`fetchOrder ${orderId}`)
+		const response = await axiosInstance.get(`/orders/${orderId}`)
+		console.log("response:", response)
+		return response.data
+	},
+
+	createOrder: async(orderDTO) => {
+		console.log("createOrder")
+		const response = await axiosInstance.post('/orders', orderDTO)
+		console.log("response:", response)
+		return response.data
+	},
+
+	updateOrder: async(orderId, orderDTO) => {
+		console.log("updateOrder", orderDTO)
+		const response = await axiosInstance.put(`/orders/${orderId}`, orderDTO)
+		console.log("response:", response)
+		return response.data
+	},
+
+	deleteOrder: async(orderId) => {
+		console.log("deleteOrder")
+		const response = await axiosInstance.delete(`/orders/${orderId}`)
+		console.log("response:", response)
+		return response.data
 	}
 
 }

@@ -11,11 +11,11 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Entity
 @Table(name = "order_details")
-public class OrderDetail {
+public class OrderDetail{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
-	private Integer orderDetailsId;
+	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "order_id")
@@ -25,9 +25,10 @@ public class OrderDetail {
 	@JoinColumn(name = "product_id")
 	private Product product;
 
-	private Integer quantity;
+	@Column(nullable = false)
+	private int quantity;
 
 	@Column(nullable = false)
-	private BigDecimal price;
+	private float price;
 
 }

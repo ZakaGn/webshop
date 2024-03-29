@@ -34,6 +34,7 @@ const Navbar = () => {
 							<>
 								<li><Link to="/admin/categories">Manage Categories</Link></li>
 								<li><Link to="/admin/products">Manage Products</Link></li>
+								<li><Link to="/admin/orders">Manage Orders</Link></li>
 							</>
 						}
 					</>

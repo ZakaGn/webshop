@@ -40,7 +40,7 @@ public class ProductService{
 		return new CategoryDto(updatedCategory.getId(), updatedCategory.getName(), updatedCategory.getDescription());
 	}
 
-	public CategoryDto getCategoryById(Integer categoryId){
+	public CategoryDto getCategoryById(Long categoryId){
 		Category category = categoryRepository.findById(categoryId).orElseThrow(
 			() -> new CategoryNotFoundException(categoryId));
 		return modelMapper.map(category, CategoryDto.class);
@@ -51,7 +51,7 @@ public class ProductService{
 			Collectors.toList());
 	}
 
-	public void deleteCategory(Integer categoryId){
+	public void deleteCategory(Long categoryId){
 		categoryRepository.deleteById(categoryId);
 	}
 
@@ -76,7 +76,7 @@ public class ProductService{
 		return modelMapper.map(updatedProduct, ProductDTO.class);
 	}
 
-	public ProductDTO getProductById(Integer productId){
+	public ProductDTO getProductById(Long productId){
 		Product product = productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
 		return modelMapper.map(product, ProductDTO.class);
 	}
@@ -86,7 +86,7 @@ public class ProductService{
 			Collectors.toList());
 	}
 
-	public void deleteProduct(Integer productId){
+	public void deleteProduct(Long productId){
 		if(!productRepository.existsById(productId)){
 			throw new ProductNotFoundException();
 		}

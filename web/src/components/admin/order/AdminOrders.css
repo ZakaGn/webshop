@@ -1,0 +1,68 @@
+#admin-orders{
+	padding: 20px;
+	max-width: 800px;
+	margin: auto;
+}
+
+#admin-orders .admin-header{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+#admin-orders .admin-header h1{
+	margin: 0;
+	font-size: 24px;
+	color: #333;
+}
+
+#admin-orders .search-input{
+	padding: 8px;
+	width: 300px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+#admin-orders .order-item{
+	background-color: #f9f9f9;
+	border: 1px solid #e3e3e3;
+	padding: 10px;
+	border-radius: 4px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 8px;
+}
+
+#admin-orders .order-details{
+	display: flex;
+	flex-direction: column;
+}
+
+#admin-orders .order-action{
+	display: flex;
+	justify-content: flex-end;
+}
+
+#admin-orders .order-action button{
+	padding: 6px 12px;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	margin-left: 8px;
+}
+
+#admin-orders .order-action button.edit{
+	background-color: #ffc107;
+}
+
+#admin-orders .order-action button.delete{
+	background-color: #dc3545;
+}
+
+#admin-orders .order-action button:hover{
+	opacity: 0.9;
+}

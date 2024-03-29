@@ -54,6 +54,11 @@ public class SecurityConfig{
 				.requestMatchers(PUT, "/products").hasAnyAuthority("EMPLOYER")
 				.requestMatchers(DELETE, "/products/{id}").hasAnyAuthority("EMPLOYER")
 
+				.requestMatchers(GET, "/orders", "/orders/{id}").permitAll()
+				.requestMatchers(POST, "/orders").hasAnyAuthority("EMPLOYER")
+				.requestMatchers(PUT, "/orders").hasAnyAuthority("EMPLOYER")
+				.requestMatchers(DELETE, "/orders/{id}").hasAnyAuthority("EMPLOYER")
+
 				.anyRequest().authenticated()
 			)
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

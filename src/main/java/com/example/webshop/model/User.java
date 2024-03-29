@@ -3,6 +3,9 @@ package com.example.webshop.model;
 import com.example.webshop.model.auth.Credentials;
 import com.example.webshop.model.auth.Role;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
@@ -21,8 +24,14 @@ public class User{
 	@JoinColumn(name = "credentials_id", referencedColumnName = "id")
 	private Credentials credentials;
 
+	@NotBlank(message = "First name is required")
+	@Size(min = 3, max = 50, message = "First name must be between 3 and 50 characters")
+	@Column(name = "first_name" , nullable = false)
 	private String firstName;
 
+	@NotBlank(message = "Last name is required")
+	@Size(min = 3, max = 50, message = "Last name must be between 3 and 50 characters")
+	@Column(name = "last_name" , nullable = false)
 	private String lastName;
 
 	public String getEmail(){

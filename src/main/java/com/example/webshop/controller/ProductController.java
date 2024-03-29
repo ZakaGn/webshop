@@ -29,26 +29,26 @@ public class ProductController{
 
 	@PostMapping("/category")
 	@PreAuthorize("hasAuthority('EMPLOYER')")
-	public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto){
-		CategoryDto createdCategory = productService.createCategory(categoryDto);
+	public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto category){
+		CategoryDto createdCategory = productService.createCategory(category);
 		return new ResponseEntity<>(createdCategory, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/category/{id}")
-	public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Integer id){
+	public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Long id){
 		return ResponseEntity.ok(productService.getCategoryById(id));
 	}
 
 	@PutMapping("/category")
 	@PreAuthorize("hasAuthority('EMPLOYER')")
-	public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto){
-		CategoryDto updatedCategory = productService.updateCategory(categoryDto);
+	public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto category){
+		CategoryDto updatedCategory = productService.updateCategory(category);
 		return ResponseEntity.ok(updatedCategory);
 	}
 
 	@DeleteMapping("/category/{id}")
 	@PreAuthorize("hasAuthority('EMPLOYER')")
-	public ResponseEntity<Void> deleteCategory(@PathVariable Integer id){
+	public ResponseEntity<Void> deleteCategory(@PathVariable Long id){
 		productService.deleteCategory(id);
 		return ResponseEntity.noContent().build();
 	}
@@ -61,28 +61,28 @@ public class ProductController{
 
 	@PostMapping
 	@PreAuthorize("hasAuthority('EMPLOYER')")
-	public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO ProductDTO){
-		ProductDTO createdProduct = productService.createProduct(ProductDTO);
+	public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO product){
+		ProductDTO createdProduct = productService.createProduct(product);
 		return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
 	}
 
-	@GetMapping("/{productId}")
-	public ResponseEntity<ProductDTO> getProductById(@PathVariable Integer productId){
-		ProductDTO product = productService.getProductById(productId);
+	@GetMapping("/{id}")
+	public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id){
+		ProductDTO product = productService.getProductById(id);
 		return ResponseEntity.ok(product);
 	}
 
 	@PutMapping
 	@PreAuthorize("hasAuthority('EMPLOYER')")
-	public ResponseEntity<ProductDTO> updateProduct(@Valid @RequestBody ProductDTO ProductDTO){
-		ProductDTO updatedProduct = productService.updateProduct(ProductDTO);
+	public ResponseEntity<ProductDTO> updateProduct(@Valid @RequestBody ProductDTO product){
+		ProductDTO updatedProduct = productService.updateProduct(product);
 		return ResponseEntity.ok(updatedProduct);
 	}
 
-	@DeleteMapping("/{productId}")
+	@DeleteMapping("/{id}")
 	@PreAuthorize("hasAuthority('EMPLOYER')")
-	public ResponseEntity<Void> deleteProduct(@PathVariable Integer productId){
-		productService.deleteProduct(productId);
+	public ResponseEntity<Void> deleteProduct(@PathVariable Long id){
+		productService.deleteProduct(id);
 		return ResponseEntity.noContent().build();
 	}
 

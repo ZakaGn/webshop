@@ -7,19 +7,19 @@ class ProductTest{
 
 	@Test
 	void testProductEquals(){
-		Category category = new Category(1, "Electronics", null);
+		Category category = new Category(1L, "Electronics", null);
 
-		Product product1 = new Product(1, "Laptop", "A high-performance laptop.", 1200.00, 10, category);
-		Product product2 = new Product(1, "Laptop", "A high-performance laptop.", 1200.00, 10, category);
+		Product product1 = new Product(1L, "Laptop", "A high-performance laptop.", 1200, 10, category);
+		Product product2 = new Product(1L, "Laptop", "A high-performance laptop.", 1200, 10, category);
 
 		assertEquals(product1, product2, "Products with the same ID should be equal");
 	}
 
 	@Test
 	void testProductHashCode(){
-		Category category = new Category(1, "Electronics", null);
+		Category category = new Category(1L, "Electronics", null);
 
-		Product product = new Product(1, "Laptop", "A high-performance laptop.", 1200.00, 10, category);
+		Product product = new Product(1L, "Laptop", "A high-performance laptop.", 1200, 10, category);
 		int expectedHashCode = product.getId().hashCode();
 
 		assertEquals(expectedHashCode, product.hashCode(), "Hashcode should be based on product ID");
@@ -27,13 +27,13 @@ class ProductTest{
 
 	@Test
 	void testProductSettersAndGetters(){
-		Category category = new Category(1, "Electronics", null);
+		Category category = new Category(1L, "Electronics", null);
 		Product product = new Product();
 
-		product.setId(1);
+		product.setId(1L);
 		product.setName("Laptop");
 		product.setDescription("A high-performance laptop.");
-		product.setPrice(1200.00);
+		product.setPrice(1200);
 		product.setQuantity(10);
 		product.setCategory(category);
 

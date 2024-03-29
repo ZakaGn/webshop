@@ -17,7 +17,7 @@ public class Cart{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
-	private Integer cartId;
+	private Long id;
 
 	@OneToOne
 	@JoinColumn(name = "user_id", referencedColumnName = "id")

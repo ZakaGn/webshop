@@ -37,9 +37,9 @@ class ProductServiceTest{
 
 	@BeforeEach
 	void setUp(){
-		category = new Category(1, "Electronics", null);
-		product = new Product(1, "Laptop", "A high-performance laptop.", 1200.00, 10, category);
-		productDTO = new ProductDTO(1, "Laptop", "A high-performance laptop.", 1200.00, 10, 1);
+		category = new Category(1L, "Electronics", null);
+		product = new Product(1L, "Laptop", "A high-performance laptop.", 1200, 10, category);
+		productDTO = new ProductDTO(1L, "Laptop", "A high-performance laptop.", 1200, 10, 1L);
 	}
 
 	@Test
@@ -99,7 +99,7 @@ class ProductServiceTest{
 	@Test
 	void updateCategory_Success(){
 		CategoryDto categoryDto = new CategoryDto();
-		categoryDto.setId(1);
+		categoryDto.setId(1L);
 		Category existingCategory = new Category();
 
 		lenient().when(categoryRepository.findById(categoryDto.getId())).thenReturn(java.util.Optional.of(existingCategory));
