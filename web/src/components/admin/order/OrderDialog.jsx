@@ -4,13 +4,13 @@ import {toast} from 'react-toastify'
 import './OrderDialog.css'
 
 const OrderDialog = ({isOpen, onClose, order}) => {
-	const [userId, setUserId] = useState(order?.userId || '')
-	const [orderDetails, setOrderDetails] = useState(order?.orderDetails || [])
+	const [userId, setUserId] = useState('')
+	const [orderDetails, setOrderDetails] = useState([])
 
 	useEffect(() => {
 		if(order){
-			setUserId(order.userId)
-			setOrderDetails(order.orderDetails)
+			setUserId(order.userId || '')
+			setOrderDetails(order.orderDetails || [])
 		}else{
 			resetForm()
 		}
@@ -32,7 +32,7 @@ const OrderDialog = ({isOpen, onClose, order}) => {
 	}
 
 	const addDetail = () => {
-		setOrderDetails([...orderDetails, {productId: '', quantity: 1, price: ''}])
+		setOrderDetails([...orderDetails, {productId: '', quantity: '', price: ''}])
 	}
 
 	const removeDetail = (index) => {
@@ -43,12 +43,10 @@ const OrderDialog = ({isOpen, onClose, order}) => {
 		const orderData = {
 			userId: parseInt(userId, 10),
 			orderDetails: orderDetails.map(detail => ({
-				id: detail.id,
-				orderId: detail.orderId,
 				productId: parseInt(detail.productId, 10),
 				quantity: parseInt(detail.quantity, 10),
-				price: parseFloat(detail.price)
-			}))
+				price: parseFloat(detail.price),
+			})),
 		}
 
 		try{
@@ -59,10 +57,11 @@ const OrderDialog = ({isOpen, onClose, order}) => {
 				await OrderService.createOrder(orderData)
 				toast.success('Order created successfully')
 			}
-			resetForm()
-			onClose()
 		}catch(error){
 			toast.error(error.response?.data?.message || 'An error occurred')
+		}finally{
+			resetForm()
+			onClose()
 		}
 	}
 
@@ -84,40 +83,41 @@ const OrderDialog = ({isOpen, onClose, order}) => {
 
 				<div className="order-details-section">
 					<h3>Order Details</h3>
-					{orderDetails.map((detail, index) => (
-						<div key={index} className="order-detail">
-							<div className="form-field">
-								<label htmlFor={`product-${index}`}>Product ID</label>
+					<div className="order-details-table">
+						<div className="order-details-header">
+							<span>Product ID</span>
+							<span>Quantity</span>
+							<span>Price</span>
+							<span>Action</span>
+						</div>
+						{orderDetails.map((detail, index) => (
+							<div key={index} className="order-detail-row">
 								<input
-									id={`product-${index}`}
 									type="number"
 									value={detail.productId}
-									onChange={(e) => handleDetailChange(index, 'productId', e.target.value)}
+									onChange={(e) =>
+										handleDetailChange(index, 'productId', e.target.value)}
 								/>
-							</div>
-							<div className="form-field">
-								<label htmlFor={`quantity-${index}`}>Quantity</label>
 								<input
-									id={`quantity-${index}`}
 									type="number"
 									value={detail.quantity}
-									onChange={(e) => handleDetailChange(index, 'quantity', e.target.value)}
+									onChange={(e) =>
+										handleDetailChange(index, 'quantity', e.target.value)}
 								/>
-							</div>
-							<div className="form-field">
-								<label htmlFor={`price-${index}`}>Price</label>
 								<input
-									id={`price-${index}`}
 									type="number"
 									step="0.01"
 									value={detail.price}
-									onChange={(e) => handleDetailChange(index, 'price', e.target.value)}
+									onChange={(e) =>
+										handleDetailChange(index, 'price', e.target.value)}
 								/>
+								<button onClick={() => removeDetail(index)}>Remove</button>
 							</div>
-							<button className="remove-detail" onClick={() => removeDetail(index)}>Remove Detail</button>
-						</div>
-					))}
-					<button className="add-detail" onClick={addDetail}>Add Detail</button>
+						))}
+						<button className="add-detail-button" onClick={addDetail}>
+							Add Detail
+						</button>
+					</div>
 				</div>
 
 				<div className="dialog-actions">
@@ -126,6 +126,7 @@ const OrderDialog = ({isOpen, onClose, order}) => {
 				</div>
 			</div>
 		</div>
+
 	)
 }
 

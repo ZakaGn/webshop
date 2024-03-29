@@ -1,3 +1,4 @@
+import './AdminOrders.css'
 import React, {useEffect, useState} from 'react'
 import {OrderService} from 'services/OrderService'
 import {toast} from 'react-toastify'
@@ -50,33 +51,37 @@ const AdminOrders = () => {
 	}
 
 	return (
-		<div id="admin-orders">
+		<div id="admin-orders" className="admin-orders-container">
 			<h1>Admin Orders</h1>
-			<button onClick={handleAddNewOrder}>Add New Order</button>
-			<input
-				type="text"
-				placeholder="Search orders..."
-				value={searchQuery}
-				onChange={handleSearchChange}
-			/>
-			<div>
+			<div className="admin-orders-header">
+				<button onClick={handleAddNewOrder} className="add-order-button">Add New Order</button>
+				<input
+					type="text"
+					placeholder="Search orders..."
+					value={searchQuery}
+					onChange={handleSearchChange}
+					className="order-search-input"
+				/>
+			</div>
+			<div className="orders-list">
 				{filteredOrders.length > 0 ? (
 					filteredOrders.map((order, index) => (
-						<div key={index} onClick={() => handleEditOrder(order)}>
-							Order ID: {order.id}, Status: {order.status}
+						<div key={index} className="order-item" onClick={() => handleEditOrder(order)}>
+							<span className="order-id">Order ID: {order.id}</span>
+							<span className="order-status">Status: {order.status}</span>
 						</div>
 					))
 				) : (
-					<p>No orders found.</p>
+					<p className="no-orders-message">No orders found.</p>
 				)}
 			</div>
 			<OrderDialog
 				isOpen={isDialogOpen}
 				onClose={handleCloseDialog}
 				order={selectedOrder}
-				onSave={fetchOrders}
 			/>
 		</div>
+
 	)
 }
 

@@ -1,52 +1,88 @@
-#order-dialog{
+.order-dialog-overlay{
 	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 100vh;
-	background-color: rgba(0, 0, 0, 0.5);
+	height: 100%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	background-color: rgba(0, 0, 0, 0.5);
 	z-index: 1050;
 }
 
-#order-dialog .dialog-content{
+#order-dialog .order-dialog-content{
 	background-color: #fff;
 	padding: 20px;
 	border-radius: 8px;
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-	width: 80%;
-	max-width: 500px;
+	width: auto;
+	max-width: 700px;
 	display: flex;
 	flex-direction: column;
+	z-index: 1051;
 }
 
-#order-dialog .dialog-header{
-	margin-bottom: 20px;
+.form-field{
+	margin-bottom: 10px;
 }
 
-#order-dialog .dialog-body{
-	margin-bottom: 20px;
+.order-details-section h3{
+	margin-top: 20px;
+	margin-bottom: 10px;
 }
 
-#order-dialog .dialog-footer{
-	text-align: right;
-}
-
-#order-dialog label{
-	margin-bottom: 5px;
-}
-
-#order-dialog input, #order-dialog select{
+.order-details-table{
 	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 10px;
+}
+
+.order-details-header{
+	display: contents;
+	font-weight: bold;
+	padding: 5px 0;
+	border-bottom: 1px solid #ccc;
+}
+
+.order-detail-row{
+	display: contents;
+}
+
+.order-detail-row > input{
 	padding: 8px;
-	margin-bottom: 15px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
 }
 
-#order-dialog button{
+.order-detail-row > button{
+	padding: 8px 10px;
+	background-color: #dc3545;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.add-detail-button{
+	grid-column: 1 / -1;
+	padding: 10px;
+	background-color: #28a745;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	margin-top: 10px;
+}
+
+.dialog-actions{
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 20px;
+}
+
+.dialog-actions > button{
 	padding: 10px 15px;
 	margin-left: 10px;
 	background-color: #007bff;
@@ -56,14 +92,28 @@
 	cursor: pointer;
 }
 
-#order-dialog button:hover{
+.dialog-actions > button:hover{
 	background-color: #0056b3;
 }
 
-#order-dialog button.cancel-btn{
+.dialog-actions > button.cancel-btn{
 	background-color: #6c757d;
 }
 
-#order-dialog button.cancel-btn:hover{
+.dialog-actions > button.cancel-btn:hover{
 	background-color: #5a6268;
+}
+
+@media (max-width: 600px){
+	.order-details-table{
+		grid-template-columns: 1fr;
+	}
+
+	.order-detail-row > button{
+		margin-top: 10px;
+	}
+
+	.add-detail-button{
+		margin-top: 20px;
+	}
 }
