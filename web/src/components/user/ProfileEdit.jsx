@@ -2,7 +2,7 @@ import './ProfileEdit.css'
 import React, {useState, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {toast} from 'react-toastify'
-import {userService} from "services/UserService"
+import userService from "services/UserService"
 
 const ProfileEdit = () => {
 	const [profile, setProfile] = useState({firstName: '', lastName: '', email: ''})

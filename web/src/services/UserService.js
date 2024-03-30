@@ -1,7 +1,7 @@
-import {api} from "utils/api"
+import api from "utils/api"
 import auth from "utils/auth";
 
-export const userService = {
+const userService = {
 	login : async(email, password) => api.login(email, password),
 	register : async(userData) => api.register(userData),
 	logout: () => {auth.removeToken();auth.removeRole()},
@@ -9,3 +9,5 @@ export const userService = {
 	updateUser : async(userData) => api.updateUser(userData),
 	getEmail : () => auth.getEmail(),
 }
+
+export default userService

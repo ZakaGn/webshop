@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {categoryService} from 'services/CategoryService'
+import CategoryService from 'services/CategoryService'
 import {toast} from 'react-toastify'
 
 const AddCategoryForm = ({onClose, onCategoryAdded}) => {
@@ -12,7 +12,7 @@ const AddCategoryForm = ({onClose, onCategoryAdded}) => {
 		setIsLoading(true)
 
 		try{
-			const addedCategory = await categoryService.addCategory({name, description})
+			const addedCategory = await CategoryService.addCategory({name, description})
 			onCategoryAdded(addedCategory.data)
 			onClose()
 			toast.success('Category added successfully!')

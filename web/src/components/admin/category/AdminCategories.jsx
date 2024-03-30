@@ -1,6 +1,6 @@
 import './AdminCategories.css'
 import React, {useEffect, useState} from 'react'
-import {categoryService} from 'services/CategoryService'
+import CategoryService from 'services/CategoryService'
 import {toast} from 'react-toastify'
 import CategoryDialog from "components/admin/category/CategoryDialog"
 
@@ -20,7 +20,7 @@ const AdminCategories = () => {
 	}, [])
 
 	const fetchCategories = () => {
-		categoryService.fetchCategories().then(data => {
+		CategoryService.fetchCategories().then(data => {
 			console.log("admin Categories: ", data)
 			setCategories(data)
 		}).catch(error => {
@@ -48,7 +48,7 @@ const AdminCategories = () => {
 
 	const handleDeleteCategory = async(id) => {
 		try{
-			await categoryService.deleteCategory(id)
+			await CategoryService.deleteCategory(id)
 			fetchCategories()
 			toast.success('Category deleted successfully')
 		}catch(error){
@@ -66,14 +66,14 @@ const AdminCategories = () => {
 		console.log("Saving category:", updatedCategory)
 		if(updatedCategory.id){
 			try{
-				await categoryService.updateCategory(updatedCategory)
+				await CategoryService.updateCategory(updatedCategory)
 				toast.success('Category updated successfully')
 			}catch(error){
 				toast.error('Failed to update category')
 			}
 		}else{
 			try{
-				await categoryService.addCategory(updatedCategory)
+				await CategoryService.addCategory(updatedCategory)
 				toast.success('Category added successfully')
 			}catch(error){
 				toast.error('Failed to add category')

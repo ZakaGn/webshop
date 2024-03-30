@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react'
-import {categoryService} from 'services/CategoryService'
+import CategoryService from 'services/CategoryService'
 import CategoryCard from 'components/category/CategoryCard'
-import AddCategoryForm from 'components/category/AddCategoryForm'
-import EditCategoryForm from 'components/category/EditCategoryForm'
+import AddCategoryForm from './AddCategoryForm'
+import EditCategoryForm from './EditCategoryForm'
 import {toast} from "react-toastify";
 
 const CategoriesList = () => {
@@ -17,7 +17,7 @@ const CategoriesList = () => {
 
 	const fetchCategories = async() => {
 		try{
-			const response = await categoryService.fetchCategories()
+			const response = await CategoryService.fetchCategories()
 			setCategories(response.data)
 		}catch(error){
 			const errorMessage = error.response?.data?.message || 'Failed to fetch categories'
@@ -36,7 +36,7 @@ const CategoriesList = () => {
 
 	const handleDelete = async(id) => {
 		try{
-			await categoryService.deleteCategory(id)
+			await CategoryService.deleteCategory(id)
 			await fetchCategories()
 			toast.success('Category deleted successfully')
 		}catch(error){

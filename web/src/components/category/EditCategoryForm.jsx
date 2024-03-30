@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {categoryService} from 'services/CategoryService'
+import CategoryService from 'services/CategoryService'
 import {toast} from "react-toastify";
 
 const EditCategoryForm = ({category, onClose, onCategoryUpdated}) => {
@@ -19,7 +19,7 @@ const EditCategoryForm = ({category, onClose, onCategoryUpdated}) => {
 		setIsLoading(true)
 
 		try{
-			const updatedCategory = await categoryService.updateCategory(category.id, {name, description})
+			const updatedCategory = await CategoryService.updateCategory(category.id, {name, description})
 			onCategoryUpdated(updatedCategory.data)
 			onClose()
 			toast.success('Category updated successfully!')

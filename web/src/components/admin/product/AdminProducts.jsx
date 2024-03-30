@@ -1,7 +1,7 @@
 import './AdminProducts.css'
 import React, {useEffect, useState} from 'react'
-import {ProductService} from 'services/ProductService'
-import {categoryService} from 'services/CategoryService'
+import ProductService from 'services/ProductService'
+import CategoryService from 'services/CategoryService'
 import {toast} from 'react-toastify'
 import ProductDialog from "components/admin/product/ProductDialog"
 
@@ -31,7 +31,7 @@ const AdminProducts = () => {
 	}
 
 	const fetchCategories = () => {
-		categoryService.fetchCategories().then(data => {
+		CategoryService.fetchCategories().then(data => {
 			setCategories(data)
 		}).catch(error => {
 			toast.error(error.response?.data?.message || 'Failed to fetch categories')

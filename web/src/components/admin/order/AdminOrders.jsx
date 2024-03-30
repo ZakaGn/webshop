@@ -1,6 +1,6 @@
 import './AdminOrders.css'
 import React, {useEffect, useState} from 'react'
-import {OrderService} from 'services/OrderService'
+import OrderService from 'services/OrderService'
 import {toast} from 'react-toastify'
 import OrderDialog from './OrderDialog'
 

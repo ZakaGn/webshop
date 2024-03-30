@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
-import {OrderService} from 'services/OrderService'
-import {ProductService} from 'services/ProductService'
+import OrderService from 'services/OrderService'
+import ProductService from 'services/ProductService'
 import {toast} from 'react-toastify'
 import './OrderDialog.css'
 import {debounce} from 'lodash'
@@ -170,13 +170,6 @@ const OrderDialog = ({isOpen, onClose, order}) => {
 					</div>
 				)}
 				<div className="search-product">
-					{/*<input
-						type="text"
-						value={searchTerm}
-						onChange={(e) => setSearchTerm(e.target.value)}
-						placeholder="Search product by name"
-					/>
-					<button onClick={handleSearch}>Search</button>*/}
 					<input
 						type="text"
 						value={searchTerm}

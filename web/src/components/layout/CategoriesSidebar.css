@@ -1,0 +1,23 @@
+.categories-sidebar{
+	width: 200px;
+	margin-right: 20px;
+}
+
+.categories-sidebar h3{
+	margin-bottom: 10px;
+}
+
+.categories-sidebar ul{
+	list-style: none;
+	padding: 0;
+}
+
+.categories-sidebar li{
+	cursor: pointer;
+	padding: 5px 10px;
+	transition: background-color 0.3s ease;
+}
+
+.categories-sidebar li:hover{
+	background-color: #f0f0f0;
+}
