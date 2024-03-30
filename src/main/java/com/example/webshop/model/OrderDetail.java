@@ -2,7 +2,6 @@ package com.example.webshop.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -30,5 +29,4 @@ public class OrderDetail{
 
 	@Column(nullable = false)
 	private float price;
-
 }

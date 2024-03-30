@@ -19,14 +19,14 @@ public class Cart{
 	@EqualsAndHashCode.Include
 	private Long id;
 
-	@OneToOne
-	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
 	private User user;
 
 	@Column(name = "created_at", nullable = false)
 	private LocalDateTime createdAt;
 
-	@OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private Set<CartItem> cartItems = new HashSet<>();
 
 	public void addCartItem(CartItem cartItem){
@@ -39,4 +39,8 @@ public class Cart{
 		cartItem.setCart(null);
 	}
 
+	@PrePersist
+	protected void onCreate(){
+		createdAt = LocalDateTime.now();
+	}
 }

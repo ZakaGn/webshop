@@ -11,7 +11,6 @@ import lombok.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "cart_items")
 public class CartItem{
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
@@ -25,8 +24,6 @@ public class CartItem{
 	@JoinColumn(name = "product_id")
 	private Product product;
 
-	@Column(nullable = false)
+	@Column(name = "quantity")
 	private int quantity;
-
 }
-

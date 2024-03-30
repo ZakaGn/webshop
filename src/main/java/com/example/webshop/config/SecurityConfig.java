@@ -59,6 +59,11 @@ public class SecurityConfig{
 				.requestMatchers(PUT, "/orders").hasAnyAuthority("CLIENT", "EMPLOYER")
 				.requestMatchers(DELETE, "/orders/{id}").hasAnyAuthority("CLIENT", "EMPLOYER")
 
+				.requestMatchers(GET, "/cart/{userId}").hasAnyAuthority("CLIENT", "EMPLOYER")
+				.requestMatchers(POST, "/cart/add").hasAnyAuthority("CLIENT", "EMPLOYER")
+				.requestMatchers(PUT, "/cart/update/{cartItemId}/{quantity}").hasAnyAuthority("CLIENT", "EMPLOYER")
+				.requestMatchers(DELETE, "/cart/remove/{cartItemId}").hasAnyAuthority("CLIENT", "EMPLOYER")
+
 				.anyRequest().authenticated()
 			)
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

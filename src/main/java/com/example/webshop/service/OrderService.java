@@ -1,16 +1,11 @@
 package com.example.webshop.service;
 
+import com.example.webshop.dto.CartDTO;
+import com.example.webshop.dto.CartItemDTO;
 import com.example.webshop.dto.OrderDTO;
 import com.example.webshop.dto.OrderDetailDTO;
-import com.example.webshop.exception.apiException.badRequestException.OrderDetailNotFoundException;
-import com.example.webshop.exception.apiException.badRequestException.OrderNotFoundException;
-import com.example.webshop.exception.apiException.badRequestException.ProductNotFoundException;
-import com.example.webshop.exception.apiException.badRequestException.UserNotFoundException;
-import com.example.webshop.model.Order;
-import com.example.webshop.model.OrderDetail;
-import com.example.webshop.model.Product;
-import com.example.webshop.model.User;
-import com.example.webshop.repository.OrderDetailRepository;
+import com.example.webshop.exception.apiException.badRequestException.*;
+import com.example.webshop.model.*;
 import com.example.webshop.repository.OrderRepository;
 import com.example.webshop.repository.ProductRepository;
 import com.example.webshop.repository.UserRepository;
@@ -22,28 +17,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import com.example.webshop.repository.CartRepository;
 
 @Service
 public class OrderService{
-
 	private final OrderRepository orderRepository;
-
+	private final CartRepository cartRepository;
 	private final UserRepository userRepository;
-
 	private final ProductRepository productRepository;
-
-	private final OrderDetailRepository orderDetailRepository;
-
 	private final ModelMapper modelMapper;
 
 	public OrderService(
-		OrderRepository orderRepository, UserRepository userRepository, ProductRepository productRepository,
-		OrderDetailRepository orderDetailRepository, ModelMapper modelMapper
+		OrderRepository orderRepository, CartRepository cartRepository, UserRepository userRepository,
+		ProductRepository productRepository, ModelMapper modelMapper
 	){
 		this.orderRepository = orderRepository;
+		this.cartRepository = cartRepository;
 		this.userRepository = userRepository;
 		this.productRepository = productRepository;
-		this.orderDetailRepository = orderDetailRepository;
 		this.modelMapper = modelMapper;
 	}
 
@@ -54,7 +45,8 @@ public class OrderService{
 		order.setUser(user);
 		order.setOrderDetails(new HashSet<>());
 		for(OrderDetailDTO detailDTO : orderDTO.getOrderDetails()){
-			Product product = productRepository.findById(detailDTO.getProductId()).orElseThrow(ProductNotFoundException::new);
+			Product product =
+				productRepository.findById(detailDTO.getProductId()).orElseThrow(ProductNotFoundException::new);
 			OrderDetail detail = modelMapper.map(detailDTO, OrderDetail.class);
 			detail.setProduct(product);
 			detail.setOrder(order);
@@ -79,20 +71,15 @@ public class OrderService{
 	@Transactional
 	public OrderDTO updateOrder(OrderDTO orderDTO){
 		Order existingOrder = orderRepository.findById(orderDTO.getId()).orElseThrow(OrderNotFoundException::new);
-
 		existingOrder.setStatus(orderDTO.getStatus());
-
 		Map<Long, OrderDetail> existingDetailsMap = existingOrder.getOrderDetails().stream().collect(
 			Collectors.toMap(OrderDetail::getId, detail -> detail));
-
 		Set<OrderDetail> updatedDetails = new HashSet<>();
 		for(OrderDetailDTO detailDTO : orderDTO.getOrderDetails()){
 			OrderDetail detail;
 			if(detailDTO.getId() != null){
 				detail = existingDetailsMap.get(detailDTO.getId());
-				if(detail == null){
-					throw new OrderDetailNotFoundException();
-				}
+				if(detail == null) throw new OrderDetailNotFoundException();
 			}else{
 				detail = new OrderDetail();
 				detail.setOrder(existingOrder);
@@ -103,18 +90,49 @@ public class OrderService{
 		}
 		existingOrder.getOrderDetails().clear();
 		existingOrder.getOrderDetails().addAll(updatedDetails);
-
 		Order updatedOrder = orderRepository.save(existingOrder);
-
 		return modelMapper.map(updatedOrder, OrderDTO.class);
 	}
 
 	@Transactional
 	public void deleteOrder(Long id){
-		if(!orderRepository.existsById(id)){
-			throw new OrderNotFoundException();
-		}
+		if(!orderRepository.existsById(id)) throw new OrderNotFoundException();
 		orderRepository.deleteById(id);
+	}
+
+	@Transactional
+	public CartDTO addCartItem(Long userId, CartItemDTO cartItemDTO){
+		Cart cart = cartRepository.findByUserId(userId).orElseThrow(CartNotFoundException::new);
+		Product product = productRepository.findById(cartItemDTO.getProductId()).orElseThrow(ProductNotFoundException::new);
+		CartItem cartItem = new CartItem();
+		cartItem.setProduct(product);
+		cartItem.setQuantity(cartItemDTO.getQuantity());
+		cart.addCartItem(cartItem);
+		cartRepository.save(cart);
+		return modelMapper.map(cart, CartDTO.class);
+	}
+
+	@Transactional
+	public CartDTO updateCartItemQuantity(Long cartItemId, int quantity){
+		CartItem cartItem = cartRepository.findCartItemById(cartItemId).orElseThrow(CartItemNotFoundException::new);
+		cartItem.setQuantity(quantity);
+		Cart cart = cartItem.getCart();
+		cartRepository.save(cart);
+		return modelMapper.map(cart, CartDTO.class);
+	}
+
+	@Transactional
+	public void removeCartItem(Long cartItemId){
+		CartItem cartItem = cartRepository.findCartItemById(cartItemId).orElseThrow(CartItemNotFoundException::new);
+		Cart cart = cartItem.getCart();
+		cart.removeCartItem(cartItem);
+		cartRepository.save(cart);
+	}
+
+	@Transactional(readOnly = true)
+	public CartDTO findByUserId(Long userId){
+		Cart cart = cartRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
+		return modelMapper.map(cart, CartDTO.class);
 	}
 
 }
