@@ -4,5 +4,4 @@ public class ProductNotFoundException extends BadRequestException{
 	public ProductNotFoundException(){
 		super("Product not found");
 	}
-
 }

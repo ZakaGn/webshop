@@ -1,6 +1,6 @@
 import './AdminProducts.css'
 import React, {useEffect, useState} from 'react'
-import {productService} from 'services/ProductService'
+import {ProductService} from 'services/ProductService'
 import {categoryService} from 'services/CategoryService'
 import {toast} from 'react-toastify'
 import ProductDialog from "components/admin/product/ProductDialog"
@@ -23,7 +23,7 @@ const AdminProducts = () => {
 	}, [])
 
 	const fetchProducts = () => {
-		productService.fetchProducts().then(data => {
+		ProductService.fetchProducts().then(data => {
 			setProducts(data)
 		}).catch(error => {
 			toast.error(error.response?.data?.message || 'Failed to fetch products')
@@ -58,7 +58,7 @@ const AdminProducts = () => {
 
 	const handleDeleteProduct = async(id) => {
 		try{
-			await productService.deleteProduct(id)
+			await ProductService.deleteProduct(id)
 			fetchProducts()
 			toast.success('Product deleted successfully')
 		}catch(error){
@@ -75,14 +75,14 @@ const AdminProducts = () => {
 	const handleSaveProduct = async(updatedProduct) => {
 		if(updatedProduct.id){
 			try{
-				await productService.updateProduct(updatedProduct)
+				await ProductService.updateProduct(updatedProduct)
 				toast.success('Product updated successfully')
 			}catch(error){
 				toast.error('Failed to update product')
 			}
 		}else{
 			try{
-				await productService.addProduct(updatedProduct)
+				await ProductService.addProduct(updatedProduct)
 				toast.success('Product added successfully')
 			}catch(error){
 				toast.error('Failed to add product')

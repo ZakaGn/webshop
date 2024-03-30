@@ -49,15 +49,15 @@ public class SecurityConfig{
 				.requestMatchers(PUT, "/products/category").hasAnyAuthority("EMPLOYER")
 				.requestMatchers(DELETE, "/products/category/{id}").hasAnyAuthority("EMPLOYER")
 
-				.requestMatchers(GET, "/products", "/products/{id}").permitAll()
+				.requestMatchers(GET, "/products", "/products/{id}", "products/search/{name}").permitAll()
 				.requestMatchers(POST, "/products").hasAnyAuthority("EMPLOYER")
 				.requestMatchers(PUT, "/products").hasAnyAuthority("EMPLOYER")
 				.requestMatchers(DELETE, "/products/{id}").hasAnyAuthority("EMPLOYER")
 
 				.requestMatchers(GET, "/orders", "/orders/{id}").permitAll()
-				.requestMatchers(POST, "/orders").hasAnyAuthority("EMPLOYER")
-				.requestMatchers(PUT, "/orders").hasAnyAuthority("EMPLOYER")
-				.requestMatchers(DELETE, "/orders/{id}").hasAnyAuthority("EMPLOYER")
+				.requestMatchers(POST, "/orders").hasAnyAuthority("CLIENT", "EMPLOYER")
+				.requestMatchers(PUT, "/orders").hasAnyAuthority("CLIENT", "EMPLOYER")
+				.requestMatchers(DELETE, "/orders/{id}").hasAnyAuthority("CLIENT", "EMPLOYER")
 
 				.anyRequest().authenticated()
 			)

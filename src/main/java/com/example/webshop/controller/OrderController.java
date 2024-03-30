@@ -40,18 +40,15 @@ public class OrderController{
 		return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping
 	@PreAuthorize("hasAuthority('CLIENT') or hasAuthority('EMPLOYER')")
-	public ResponseEntity<OrderDTO> updateOrder(@PathVariable Long id, @Valid @RequestBody OrderDTO orderDTO){
-		if(!id.equals(orderDTO.getId())){
-			return ResponseEntity.badRequest().build();
-		}
+	public ResponseEntity<OrderDTO> updateOrder(@Valid @RequestBody OrderDTO orderDTO){
 		OrderDTO updatedOrder = orderService.updateOrder(orderDTO);
 		return ResponseEntity.ok(updatedOrder);
 	}
 
 	@DeleteMapping("/{id}")
-	@PreAuthorize("hasAuthority('EMPLOYER')")
+	@PreAuthorize("hasAuthority('CLIENT') or hasAuthority('EMPLOYER')")
 	public ResponseEntity<Void> deleteOrder(@PathVariable Long id){
 		orderService.deleteOrder(id);
 		return ResponseEntity.noContent().build();

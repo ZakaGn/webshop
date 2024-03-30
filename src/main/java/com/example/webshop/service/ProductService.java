@@ -63,6 +63,18 @@ public class ProductService{
 		return modelMapper.map(savedProduct, ProductDTO.class);
 	}
 
+	public ProductDTO getProductById(Long productId){
+		Product product = productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
+		return modelMapper.map(product, ProductDTO.class);
+	}
+
+	public List<ProductDTO> searchProductsByName(String name){
+		List<Product> productList = productRepository
+			.findByNameContainingIgnoreCase(name)
+			.orElseThrow(ProductNotFoundException::new);
+		return productList.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
+	}
+
 	public ProductDTO updateProduct(ProductDTO productDTO){
 		Product existingProduct =
 			productRepository.findById(productDTO.getId()).orElseThrow(ProductNotFoundException::new);
@@ -76,11 +88,6 @@ public class ProductService{
 		return modelMapper.map(updatedProduct, ProductDTO.class);
 	}
 
-	public ProductDTO getProductById(Long productId){
-		Product product = productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
-		return modelMapper.map(product, ProductDTO.class);
-	}
-
 	public List<ProductDTO> getAllProducts(){
 		return productRepository.findAll().stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(
 			Collectors.toList());
@@ -92,4 +99,5 @@ public class ProductService{
 		}
 		productRepository.deleteById(productId);
 	}
+
 }

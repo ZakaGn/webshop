@@ -59,17 +59,23 @@ public class ProductController{
 		return ResponseEntity.ok(products);
 	}
 
+	@GetMapping("/{id}")
+	public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id){
+		ProductDTO product = productService.getProductById(id);
+		return ResponseEntity.ok(product);
+	}
+
+	@GetMapping("/search/{name}")
+	public ResponseEntity<List<ProductDTO>> searchProductsByName(@PathVariable String name){
+		List<ProductDTO> products = productService.searchProductsByName(name);
+		return ResponseEntity.ok(products);
+	}
+
 	@PostMapping
 	@PreAuthorize("hasAuthority('EMPLOYER')")
 	public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO product){
 		ProductDTO createdProduct = productService.createProduct(product);
 		return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
-	}
-
-	@GetMapping("/{id}")
-	public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id){
-		ProductDTO product = productService.getProductById(id);
-		return ResponseEntity.ok(product);
 	}
 
 	@PutMapping

@@ -4,6 +4,7 @@ import com.example.webshop.dto.OrderDTO;
 import com.example.webshop.dto.OrderDetailDTO;
 import com.example.webshop.exception.apiException.badRequestException.OrderDetailNotFoundException;
 import com.example.webshop.exception.apiException.badRequestException.OrderNotFoundException;
+import com.example.webshop.exception.apiException.badRequestException.ProductNotFoundException;
 import com.example.webshop.exception.apiException.badRequestException.UserNotFoundException;
 import com.example.webshop.model.Order;
 import com.example.webshop.model.OrderDetail;
@@ -53,8 +54,7 @@ public class OrderService{
 		order.setUser(user);
 		order.setOrderDetails(new HashSet<>());
 		for(OrderDetailDTO detailDTO : orderDTO.getOrderDetails()){
-			Product product = productRepository.findById(detailDTO.getProductId()).orElseThrow(
-				() -> new RuntimeException("Product not found"));
+			Product product = productRepository.findById(detailDTO.getProductId()).orElseThrow(ProductNotFoundException::new);
 			OrderDetail detail = modelMapper.map(detailDTO, OrderDetail.class);
 			detail.setProduct(product);
 			detail.setOrder(order);
