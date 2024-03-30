@@ -1,30 +1,46 @@
-import React, { useState } from 'react';
-import './SearchComponent.css'; // Adjust the path as needed
+import React, {useState} from 'react'
+import {debounce} from 'lodash'
+import './SearchComponent.css'
 
-const SearchComponent = ({ onSearch }) => {
-	const [searchTerm, setSearchTerm] = useState('');
+const SearchComponent = ({onSearch}) => {
+	const [searchTerm, setSearchTerm] = useState('')
+
+	const debouncedSearch = debounce((searchTerm) => {
+		onSearch(searchTerm, false)
+	}, 300)
 
 	const handleSearchChange = (event) => {
-		setSearchTerm(event.target.value);
-	};
+		const value = event.target.value
+		setSearchTerm(value)
+		if(value.trim() === ''){
+			onSearch(value, false)
+		}else{
+			onSearch(value, true)
+			debouncedSearch(value)
+		}
+	}
 
-	const handleSubmit = (event) => {
-		event.preventDefault(); // Prevent the form from refreshing the page
-		onSearch(searchTerm); // Trigger the search action passed from the parent component
-	};
+	const handleResetSearch = () => {
+		setSearchTerm('')
+		onSearch('', false)
+	}
 
 	return (
-		<form className="search-form" onSubmit={handleSubmit}>
-			<input
-				type="text"
-				placeholder="Search..."
-				value={searchTerm}
-				onChange={handleSearchChange}
-				className="search-input"
-			/>
-			<button type="submit" className="search-button">Search</button>
-		</form>
-	);
-};
+		<div className="search-component">
+			<div className="search-input-container">
+				<input
+					type="text"
+					placeholder="Search..."
+					value={searchTerm}
+					onChange={handleSearchChange}
+					className="search-input"
+				/>
+				{searchTerm && (
+					<button onClick={handleResetSearch} className="reset-search-button">&times;</button>
+				)}
+			</div>
+		</div>
+	)
+}
 
-export default SearchComponent;
+export default SearchComponent

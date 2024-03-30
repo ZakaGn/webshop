@@ -1,37 +1,40 @@
-import React from 'react';
-import './PaginationComponent.css'; // Make sure to style your pagination as needed
+import React from 'react'
+import './PaginationComponent.css'
 
-const PaginationComponent = ({ totalPages, currentPage, onPageChange }) => {
-	// Generate page numbers
-	const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
+const PaginationComponent = ({totalPages, currentPage, onPageChange}) => {
+	const isFirstPage = currentPage === 1
+	const isLastPage = currentPage === totalPages
 
 	return (
 		<div className="pagination-container">
 			<button
-				className="pagination-button"
-				onClick={() => onPageChange(currentPage - 1)}
-				disabled={currentPage === 1}
+				className={`pagination-button ${isFirstPage ? 'disabled' : ''}`}
+				onClick={() => !isFirstPage && onPageChange(currentPage - 1)}
+				disabled={isFirstPage}
 			>
 				Previous
 			</button>
-			{pages.map(page => (
-				<button
-					key={page}
-					className={`pagination-button ${page === currentPage ? 'active' : ''}`}
-					onClick={() => onPageChange(page)}
-				>
-					{page}
-				</button>
-			))}
+			{[...Array(totalPages).keys()].map(n => {
+				const page = n + 1
+				return (
+					<button
+						key={page}
+						className={`pagination-button ${page === currentPage ? 'active' : ''}`}
+						onClick={() => onPageChange(page)}
+					>
+						{page}
+					</button>
+				)
+			})}
 			<button
-				className="pagination-button"
-				onClick={() => onPageChange(currentPage + 1)}
-				disabled={currentPage === totalPages}
+				className={`pagination-button ${isLastPage ? 'disabled' : ''}`}
+				onClick={() => !isLastPage && onPageChange(currentPage + 1)}
+				disabled={isLastPage}
 			>
 				Next
 			</button>
 		</div>
-	);
-};
+	)
+}
 
-export default PaginationComponent;
+export default PaginationComponent

@@ -9,73 +9,108 @@ import ProductService from 'services/ProductService'
 import CategoryService from 'services/CategoryService'
 
 const Home = () => {
-	const [products, setProducts] = useState([])
+	const [allProducts, setAllProducts] = useState([])
+	const [filteredProducts, setFilteredProducts] = useState([])
 	const [categories, setCategories] = useState([])
 	const [selectedProduct, setSelectedProduct] = useState(null)
+	const [selectedCategory, setSelectedCategory] = useState(null)
 	const [currentPage, setCurrentPage] = useState(1)
-	const [productsPerPage] = useState(10)
+	const [productsPerPage, setProductsPerPage] = useState(10)
 	const [searchTerm, setSearchTerm] = useState('')
-	let isMounted = true
+	const [isLoading, setIsLoading] = useState(false)
 
 	useEffect(() => {
-		if(!isMounted) return
-		fetchCategories()
-		fetchProducts()
-		return () => {
-			isMounted = false
+		const fetchInitialData = async() => {
+			setIsLoading(true)
+			const fetchedCategories = await CategoryService.fetchCategories()
+			const fetchedProducts = await ProductService.fetchProducts()
+			setCategories(fetchedCategories)
+			setAllProducts(fetchedProducts)
+			setFilteredProducts(fetchedProducts)
+			setIsLoading(false)
 		}
+		fetchInitialData()
 	}, [])
 
-	const fetchCategories = async() => {
-		const data = await CategoryService.fetchCategories()
-		setCategories(data)
+	useEffect(() => {
+		const newFilteredProducts = allProducts.filter(product => {
+			return (!selectedCategory || product.categoryId === selectedCategory.id) &&
+				product.name.toLowerCase().includes(searchTerm)
+		})
+		setFilteredProducts(newFilteredProducts)
+	}, [searchTerm, selectedCategory, allProducts])
+
+	const handleCategorySelect = (category) => {
+		setSelectedCategory(category)
+		setCurrentPage(1)
 	}
 
-	const fetchProducts = async() => {
-		const data = await ProductService.fetchProducts()
-		setProducts(data)
-	}
-
-	const handleSearch = (searchTerm) => {
-		setSearchTerm(searchTerm.toLowerCase())
+	const handleSearch = (term, isSearching) => {
+		setIsLoading(isSearching)
+		setSearchTerm(term.toLowerCase())
+		setCurrentPage(1)
 	}
 
 	const indexOfLastProduct = currentPage*productsPerPage
 	const indexOfFirstProduct = indexOfLastProduct - productsPerPage
-	const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct)
+	const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct)
 
-	const paginate = (pageNumber) => setCurrentPage(pageNumber)
-
-	const handleProductClick = (product) => {
-		setSelectedProduct(product)
+	const paginate = (pageNumber) => {
+		if(pageNumber >= 1 && pageNumber <= totalPages){
+			setCurrentPage(pageNumber)
+		}
 	}
+	const totalPages = Math.ceil(filteredProducts.length/productsPerPage)
 
-	const handleAddToCart = (product) => {
-		console.log('Add to cart:', product)
+	const handleProductsPerPageChange = (event) => {
+		setProductsPerPage(Number(event.target.value))
+		setCurrentPage(1)
 	}
 
 	return (
-		<div className="home-container">
-			<CategoriesSidebar categories={categories}/>
+		<div id="home-container" className="home-container">
+			<CategoriesSidebar categories={categories} onCategorySelect={handleCategorySelect}/>
 			<div className="main-content">
-				<SearchComponent onSearch={handleSearch}/>
-				<div className="product-list">
-					{currentProducts.filter(product => product.name.toLowerCase().includes(searchTerm)).map(product => (
-						<ProductCard key={product.id} product={product} onClick={handleProductClick}/>
-					))}
+				<div className="search-wrapper">
+					<SearchComponent onSearch={handleSearch}/>
+					<div className="products-per-page-selector">
+						<label htmlFor="products-per-page">Products per page:</label>
+						<select
+							id="products-per-page"
+							value={productsPerPage}
+							onChange={handleProductsPerPageChange}
+						>
+							<option value="5">5</option>
+							<option value="10">10</option>
+							<option value="15">15</option>
+							<option value="20">20</option>
+						</select>
+					</div>
 				</div>
+				{isLoading ? (
+					<div>Loading products...</div>
+				) : currentProducts.length > 0 ? (
+					<div className="product-list">
+						{currentProducts.map(product => (
+							<ProductCard key={product.id} product={product} onClick={() => setSelectedProduct(product)}/>
+						))}
+					</div>
+				) : (
+					<div>No products found.</div>
+				)}
 				<PaginationComponent
-					productsPerPage={productsPerPage}
-					totalProducts={products.length}
-					paginate={paginate}
+					totalPages={totalPages}
+					currentPage={currentPage}
+					onPageChange={paginate}
 				/>
-				{selectedProduct &&
+				{selectedProduct && (
 					<ProductDetailDialog
 						product={selectedProduct}
+						isOpen={!!selectedProduct}
 						onClose={() => setSelectedProduct(null)}
-						onAddToCart={handleAddToCart}
+						onAddToCart={() => console.log("Add to cart", selectedProduct)}
 					/>
-				}
+				)}
 			</div>
 		</div>
 	)

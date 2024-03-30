@@ -1,5 +1,5 @@
-import React from 'react';
-import './ProductCard.css';
+import React from 'react'
+import './ProductCard.css'
 
 const ProductCard = ({product, onClick}) => {
 	return (
@@ -14,4 +14,4 @@ const ProductCard = ({product, onClick}) => {
 	)
 }
 
-export default ProductCard;
+export default ProductCard
