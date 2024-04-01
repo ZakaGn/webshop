@@ -70,7 +70,7 @@ class UserControllerTest{
 
 		when(userService.getUserDataByEmail(anyString())).thenReturn(userDTO);
 
-		ResponseEntity<UserDTO> response = userController.getUserData(principal.getName());
+		ResponseEntity<UserDTO> response = userController.getUser(principal.getName());
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(userDTO, response.getBody());

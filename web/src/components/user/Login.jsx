@@ -4,7 +4,7 @@ import {toast} from 'react-toastify'
 import {useNavigate} from 'react-router-dom'
 import userService from "services/UserService"
 
-const Login = () => {
+const Login = ({getUser}) => {
 	const [formData, setFormData] = useState({email: '', password: ''})
 	const [formErrors, setFormErrors] = useState({})
 	const navigate = useNavigate()
@@ -19,8 +19,7 @@ const Login = () => {
 		e.preventDefault()
 		const {email, password} = formData
 
-		if(!email){
-			setFormErrors(prev => ({...prev, email: "Email is required"}))
+		if(!email){setFormErrors(prev => ({...prev, email: "Email is required"}))
 			return
 		}
 
@@ -31,11 +30,13 @@ const Login = () => {
 
 		userService
 			.login(email, password)
-			.then(response => {
+			.then(() => {
+				getUser()
 				toast.success('Login successful!')
 				navigate("/dashboard")
 			})
 			.catch(error => {
+				console.error('Login failed:', error)
 				toast.error(error.response?.data?.message || 'Failed to log in. Please try again.')
 			})
 	}

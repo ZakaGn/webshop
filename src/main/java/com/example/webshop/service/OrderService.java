@@ -5,10 +5,12 @@ import com.example.webshop.dto.CartItemDTO;
 import com.example.webshop.dto.OrderDTO;
 import com.example.webshop.dto.OrderDetailDTO;
 import com.example.webshop.exception.apiException.badRequestException.*;
+import com.example.webshop.exception.apiException.unauthorizedException.UserNotAuthenticatedException;
 import com.example.webshop.model.*;
 import com.example.webshop.repository.OrderRepository;
 import com.example.webshop.repository.ProductRepository;
 import com.example.webshop.repository.UserRepository;
+import com.example.webshop.util.Util;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import com.example.webshop.repository.CartRepository;
 
@@ -68,6 +71,13 @@ public class OrderService{
 		return modelMapper.map(order, OrderDTO.class);
 	}
 
+	@Transactional(readOnly = true)
+	public List<OrderDTO> getUserOrders(){
+		Long userId = Util.getUserId();
+		List<Order> orders = orderRepository.findByUserId(userId).orElseThrow(OrderNotFoundException::new);
+		return orders.stream().map(order -> modelMapper.map(order, OrderDTO.class)).collect(Collectors.toList());
+	}
+
 	@Transactional
 	public OrderDTO updateOrder(OrderDTO orderDTO){
 		Order existingOrder = orderRepository.findById(orderDTO.getId()).orElseThrow(OrderNotFoundException::new);
@@ -101,9 +111,47 @@ public class OrderService{
 	}
 
 	@Transactional
+	public OrderDTO submit(CartDTO cartDTO){
+		Long userId = Util.getUserId();
+		User user = userRepository.findById(cartDTO.getUserId()).orElseThrow(UserNotAuthenticatedException::new);
+		if(!userId.equals(user.getId())) throw new UserNotAuthenticatedException();
+		if(cartDTO.getCartItems().isEmpty()) throw new EmptyCartException();
+		Order order = new Order();
+		order.setUser(user);
+		order.setOrderDetails(new HashSet<>());
+		for(CartItemDTO cartItemDTO : cartDTO.getCartItems()){
+			Product product = productRepository.findById(cartItemDTO.getProductId()).orElseThrow(
+				ProductNotFoundException::new);
+			OrderDetail detail = new OrderDetail();
+			detail.setProduct(product);
+			detail.setQuantity(cartItemDTO.getQuantity());
+			detail.setPrice(product.getPrice());
+			detail.setOrder(order);
+			order.getOrderDetails().add(detail);
+		}
+		Order savedOrder = orderRepository.save(order);
+		Cart cart = cartRepository.findByUserId(user.getId()).orElseThrow(CartNotFoundException::new);
+		cart.getCartItems().clear();
+		cartRepository.save(cart);
+		return modelMapper.map(savedOrder, OrderDTO.class);
+	}
+
+	@Transactional
 	public CartDTO addCartItem(Long userId, CartItemDTO cartItemDTO){
+		final boolean[] update = {false};
 		Cart cart = cartRepository.findByUserId(userId).orElseThrow(CartNotFoundException::new);
-		Product product = productRepository.findById(cartItemDTO.getProductId()).orElseThrow(ProductNotFoundException::new);
+		Product product =
+			productRepository.findById(cartItemDTO.getProductId()).orElseThrow(ProductNotFoundException::new);
+		cart.getCartItems().forEach(cartItem -> {
+			if(cartItem.getProduct().getId().equals(product.getId())){
+				cartItem.setQuantity(cartItem.getQuantity() + cartItemDTO.getQuantity());
+				update[0] = true;
+			}
+		});
+		if(update[0]){
+			cartRepository.save(cart);
+			return modelMapper.map(cart, CartDTO.class);
+		}
 		CartItem cartItem = new CartItem();
 		cartItem.setProduct(product);
 		cartItem.setQuantity(cartItemDTO.getQuantity());
@@ -130,7 +178,13 @@ public class OrderService{
 	}
 
 	@Transactional(readOnly = true)
-	public CartDTO findByUserId(Long userId){
+	public CartDTO getCart(){
+		Cart cart = cartRepository.findByUserId(Util.getUserId()).orElseThrow(UserNotFoundException::new);
+		return modelMapper.map(cart, CartDTO.class);
+	}
+
+	@Transactional(readOnly = true)
+	public CartDTO getCartByUserId(Long userId){
 		Cart cart = cartRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
 		return modelMapper.map(cart, CartDTO.class);
 	}

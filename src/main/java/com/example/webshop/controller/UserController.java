@@ -32,16 +32,16 @@ public class UserController{
 	}
 
 	@GetMapping("/data")
-	public ResponseEntity<UserDTO> getUserData(@AuthenticationPrincipal String email){
+	public ResponseEntity<UserDTO> getUser(@AuthenticationPrincipal String email){
 		UserDTO userDTO = userService.getUserDataByEmail(email);
 		return ResponseEntity.ok(userDTO);
 	}
 
 	@PostMapping("update")
-	public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateUserDTO updateUserDTO, Principal principal){
+	public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UpdateUserDTO updateUserDTO, Principal principal){
 		System.out.println("Principal: " + principal.getName());
-		userService.updateUserDetails(updateUserDTO, principal.getName());
-		return new ResponseEntity<>(HttpStatus.OK);
+		UserDTO user = userService.updateUserDetails(updateUserDTO, principal.getName());
+		return ResponseEntity.ok(user);
 	}
 
 }

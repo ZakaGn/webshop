@@ -59,7 +59,7 @@ public class UserService{
 	}
 
 	@Transactional
-	public void updateUserDetails(UpdateUserDTO updateUserDTO, String userEmail){
+	public UserDTO updateUserDetails(UpdateUserDTO updateUserDTO, String userEmail){
 		User user = userRepository.findUserByCredentialsEmail(userEmail).orElseThrow(UserNotFoundException::new);
 		user.setFirstName(updateUserDTO.getFirstName());
 		user.setLastName(updateUserDTO.getLastName());
@@ -71,6 +71,7 @@ public class UserService{
 			user.getCredentials().setEmail(updateUserDTO.getEmail());
 		}
 		userRepository.save(user);
+		return new UserDTO(user);
 	}
 
 }

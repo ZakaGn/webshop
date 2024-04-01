@@ -20,7 +20,7 @@ const AdminOrders = () => {
 	}, [])
 
 	const fetchOrders = () => {
-		OrderService.fetchOrders().then(
+		OrderService.getAllOrders().then(
 			data => setOrders(data)
 		).catch(
 			error => toast.error(error.response?.data?.message || 'Failed to fetch orders')

@@ -1,11 +1,13 @@
 import api from "utils/api";
 
 const OrderService = {
-	fetchOrders: async () => api.fetchOrders(),
-	fetchOrderById: async (id) => api.fetchOrderById(id),
+	getAllOrders: async () => api.getAllOrders(),
+	getUserOrders: async () => api.getUserOrders(),
+	getOrderById: async (id) => api.getOrderById(id),
 	createOrder: async (order) => api.createOrder(order),
 	updateOrder: async (order) => api.updateOrder(order),
-	deleteOrder: async (id) => api.deleteOrder(id)
+	deleteOrder: async (id) => api.deleteOrder(id),
+	submitOrder: async (order) => api.submitOrder(order)
 }
 
 export default OrderService

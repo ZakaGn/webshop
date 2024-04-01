@@ -54,12 +54,14 @@ public class SecurityConfig{
 				.requestMatchers(PUT, "/products").hasAnyAuthority("EMPLOYER")
 				.requestMatchers(DELETE, "/products/{id}").hasAnyAuthority("EMPLOYER")
 
-				.requestMatchers(GET, "/orders", "/orders/{id}").permitAll()
-				.requestMatchers(POST, "/orders").hasAnyAuthority("CLIENT", "EMPLOYER")
+				.requestMatchers(GET, "/orders/get/{id}", "/orders/get/all").hasAuthority("EMPLOYER")
+				.requestMatchers(GET, "/orders/get").hasAnyAuthority("CLIENT","EMPLOYER")
+				.requestMatchers(POST,  "/orders/submit").hasAnyAuthority("CLIENT", "EMPLOYER")
 				.requestMatchers(PUT, "/orders").hasAnyAuthority("CLIENT", "EMPLOYER")
 				.requestMatchers(DELETE, "/orders/{id}").hasAnyAuthority("CLIENT", "EMPLOYER")
 
-				.requestMatchers(GET, "/cart/{userId}").hasAnyAuthority("CLIENT", "EMPLOYER")
+				.requestMatchers(GET, "/cart/get/{userId}").hasAuthority("EMPLOYER")
+				.requestMatchers(GET, "/cart").hasAnyAuthority("CLIENT", "EMPLOYER")
 				.requestMatchers(POST, "/cart/add").hasAnyAuthority("CLIENT", "EMPLOYER")
 				.requestMatchers(PUT, "/cart/update/{cartItemId}/{quantity}").hasAnyAuthority("CLIENT", "EMPLOYER")
 				.requestMatchers(DELETE, "/cart/remove/{cartItemId}").hasAnyAuthority("CLIENT", "EMPLOYER")

@@ -9,7 +9,7 @@ const api = {
 		auth.saveToken(token)
 		auth.saveRole(role)
 		auth.saveEmail(email)
-		return response.data
+		//return response.data
 	},
 
 	register: async userData => {
@@ -19,10 +19,10 @@ const api = {
 		return response.data
 	},
 
-	fetchUserData: async() => {
-		console.log("api.fetchUserData")
+	getUser: async() => {
+		console.log("api.getUser")
 		const response = await axiosInstance.get('/user/data')
-		console.log("api.fetchUserData.response:", response)
+		console.log("api.getUser.response:", response)
 		return response.data
 	},
 
@@ -96,17 +96,24 @@ const api = {
 		return response.data
 	},
 
-	fetchOrders: async() => {
-		console.log("api.fetchOrders")
-		const response = await axiosInstance.get('/orders')
-		console.log("api.fetchOrders.response:", response)
+	getAllOrders: async() => {
+		console.log("api.getAllOrders")
+		const response = await axiosInstance.get('/orders/get/all')
+		console.log("api.getAllOrders.response:", response)
 		return response.data
 	},
 
-	fetchOrderById: async id => {
-		console.log(`api.fetchOrderById ${id}`)
-		const response = await axiosInstance.get(`/orders/${id}`)
-		console.log("api.fetchOrderById.response:", response)
+	getUserOrders: async() => {
+		console.log(`api.getOrder`)
+		const response = await axiosInstance.get(`/orders/get`)
+		console.log("api.getOrder.response:", response)
+		return response.data
+	},
+
+	getOrderById: async id => {
+		console.log("api.getOrderById")
+		const response = await axiosInstance.get(`/orders/get/${id}`)
+		console.log("api.getOrderById.response:", response)
 		return response.data
 	},
 
@@ -129,8 +136,49 @@ const api = {
 		const response = await axiosInstance.delete(`/orders/${id}`)
 		console.log("api.deleteOrder.response:", response)
 		return response.data
-	}
+	},
 
+	submitOrder: async order => {
+		console.log("api.submitOrder", order)
+		const response = await axiosInstance.post('/orders/submit', order)
+		console.log("api.submitOrder.response:", response)
+		return response.data
+	},
+
+	getCart: async() => {
+		console.log("api.fetchCart")
+		const response = await axiosInstance.get('/cart')
+		console.log("api.fetchCart.response:", response)
+		return response.data
+	},
+
+	getCartByUserId: async userId => {
+		console.log("api.fetchCart")
+		const response = await axiosInstance.get(`/cart/${userId}`)
+		console.log("api.fetchCart.response:", response)
+		return response.data
+	},
+
+	addToCart: async cartItem => {
+		console.log("api.addToCart")
+		const response = await axiosInstance.post('/cart/add', cartItem)
+		console.log("api.addToCart.response:", response)
+		return response.data
+	},
+
+	removeFromCart: async id => {
+		console.log("api.removeFromCart")
+		const response = await axiosInstance.delete(`/cart/${id}`)
+		console.log("api.removeFromCart.response:", response)
+		return response.data
+	},
+
+	clearCart: async() => {
+		console.log("api.clearCart")
+		const response = await axiosInstance.delete('/cart')
+		console.log("api.clearCart.response:", response)
+		return response.data
+	}
 }
 
 export default api

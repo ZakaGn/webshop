@@ -3,6 +3,7 @@ package com.example.webshop.controller;
 import com.example.webshop.dto.CartDTO;
 import com.example.webshop.dto.CartItemDTO;
 import com.example.webshop.service.OrderService;
+import com.example.webshop.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +20,24 @@ public class CartController{
 		this.orderService = orderService;
 	}
 
-	@GetMapping("/user/{userId}")
+	@GetMapping
 	@PreAuthorize("hasAnyAuthority('CLIENT', 'EMPLOYER')")
-	public ResponseEntity<CartDTO> findByUserId(@PathVariable Long userId){
-		CartDTO cartDTO = orderService.findByUserId(userId);
+	public ResponseEntity<CartDTO> getCart(){
+		CartDTO cartDTO = orderService.getCart();
+		return ResponseEntity.ok(cartDTO);
+	}
+
+	@GetMapping("/get/{userId}")
+	@PreAuthorize("hasAuthority('EMPLOYER')")
+	public ResponseEntity<CartDTO> getCartByUserId(@PathVariable Long userId){
+		CartDTO cartDTO = orderService.getCartByUserId(userId);
 		return ResponseEntity.ok(cartDTO);
 	}
 
 	@PostMapping("/add")
 	@PreAuthorize("hasAnyAuthority('CLIENT', 'EMPLOYER')")
-	public ResponseEntity<CartDTO> addCartItem(@RequestParam Long userId, @RequestBody CartItemDTO cartItemDTO){
-		CartDTO cartDTO = orderService.addCartItem(userId, cartItemDTO);
+	public ResponseEntity<CartDTO> addCartItem(@RequestBody CartItemDTO cartItemDTO){
+		CartDTO cartDTO = orderService.addCartItem(Util.getUserId(), cartItemDTO);
 		return new ResponseEntity<>(cartDTO, HttpStatus.CREATED);
 	}
 

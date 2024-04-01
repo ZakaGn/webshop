@@ -3,23 +3,13 @@ import React, {useState, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {toast} from 'react-toastify'
 import userService from "services/UserService"
+import User from "../../model/User";
 
-const ProfileEdit = () => {
-	const [profile, setProfile] = useState({firstName: '', lastName: '', email: ''})
+const ProfileEdit = ({user, setUser}) => {
+	const [profile, setProfile] = useState({firstName: user.firstName, lastName: user.lastName, email: user.email})
 	const [loading, setLoading] = useState(false)
-	const navigate = useNavigate()
 	const [errors, setErrors] = useState({})
-
-	useEffect(() => {
-		setLoading(true)
-		userService.fetchUser().then(response => {
-			setProfile(response)
-			setLoading(false)
-		}).catch(error => {
-			toast.error('Failed to fetch profile data')
-			setLoading(false)
-		})
-	}, [])
+	const navigate = useNavigate()
 
 	const handleChange = (event) => {
 		const {name, value} = event.target
@@ -57,7 +47,9 @@ const ProfileEdit = () => {
 		}
 		setLoading(true)
 		try{
-			await userService.updateUser(profile)
+			const updateUser = await userService.updateUser(profile)
+			const newUser = new User(updateUser)
+			setUser(newUser)
 			toast.success('Profile updated successfully')
 			navigate('/dashboard')
 		}catch(error){
@@ -89,7 +81,8 @@ const ProfileEdit = () => {
 					{errors.email && <div className="error">{errors.email}</div>}
 				</div>
 				<button type="submit" disabled={loading}>Update Profile</button>
-				<button type="button" className={"btn-profile-edit-cancel"} onClick={() => navigate('/dashboard')}>Cancel</button>
+				<button type="button" className={"btn-profile-edit-cancel"} onClick={() => navigate('/dashboard')}>Cancel
+				</button>
 			</form>
 		</div>
 	)

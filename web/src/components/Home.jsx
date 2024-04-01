@@ -8,7 +8,7 @@ import SearchComponent from './SearchComponent'
 import ProductService from 'services/ProductService'
 import CategoryService from 'services/CategoryService'
 
-const Home = () => {
+const Home = ({cart, setCart}) => {
 	const [allProducts, setAllProducts] = useState([])
 	const [filteredProducts, setFilteredProducts] = useState([])
 	const [categories, setCategories] = useState([])
@@ -18,8 +18,10 @@ const Home = () => {
 	const [productsPerPage, setProductsPerPage] = useState(10)
 	const [searchTerm, setSearchTerm] = useState('')
 	const [isLoading, setIsLoading] = useState(false)
+	let isMounted = true
 
 	useEffect(() => {
+		if(!isMounted) return
 		const fetchInitialData = async() => {
 			setIsLoading(true)
 			const fetchedCategories = await CategoryService.fetchCategories()
@@ -30,6 +32,7 @@ const Home = () => {
 			setIsLoading(false)
 		}
 		fetchInitialData()
+		return () => {isMounted = false}
 	}, [])
 
 	useEffect(() => {
@@ -105,10 +108,10 @@ const Home = () => {
 				/>
 				{selectedProduct && (
 					<ProductDetailDialog
+						cart={cart}
 						product={selectedProduct}
-						isOpen={!!selectedProduct}
 						onClose={() => setSelectedProduct(null)}
-						onAddToCart={() => console.log("Add to cart", selectedProduct)}
+						setCart={setCart}
 					/>
 				)}
 			</div>

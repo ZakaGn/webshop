@@ -5,9 +5,13 @@ const userService = {
 	login : async(email, password) => api.login(email, password),
 	register : async(userData) => api.register(userData),
 	logout: () => {auth.removeToken();auth.removeRole()},
-	fetchUser : async() => api.fetchUserData(),
+
+	getUser : async() => api.getUser(),
 	updateUser : async(userData) => api.updateUser(userData),
+
 	getEmail : () => auth.getEmail(),
+	getRole : () => auth.getRole(),
+	isAuthenticated : () => auth.isAuthenticated()
 }
 
 export default userService

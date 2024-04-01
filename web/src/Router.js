@@ -10,16 +10,16 @@ import AdminCategories from "components/admin/category/AdminCategories"
 import AdminProducts from "components/admin/product/AdminProducts"
 import AdminOrders from "components/admin/order/AdminOrders"
 
-const AppRouter = () => {
+const AppRouter = ({user, cart, orders, getUser, setUser, setCart}) => {
 	return (
 		<Router>
-			<Navbar />
+			<Navbar user={user} cart={cart} setUser={setUser}/>
 			<Routes>
-				<Route path="/" element={<Home/>}/>
-				<Route path="/login" element={<Login/>}/>
+				<Route path="/" element={<Home cart={cart} setCart={setCart}/>}/>
+				<Route path="/login" element={<Login getUser={getUser}/>}/>
 				<Route path="/register" element={<Register/>}/>
-				<Route path="/dashboard" element={<Dashboard/>}/>
-				<Route path="/edit-profile" element={<ProfileEdit />} />
+				<Route path="/dashboard" element={<Dashboard user={user}/>}/>
+				<Route path="/edit-profile" element={<ProfileEdit user={user} setUser={setUser}/>} />
 				<Route path="/admin/categories" element={<AdminCategories />} />
 				<Route path="/admin/products" element={<AdminProducts />} />
 				<Route path="/admin/orders" element={<AdminOrders />} />

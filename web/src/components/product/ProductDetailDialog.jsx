@@ -1,14 +1,27 @@
 import React, {useState} from 'react'
 import './ProductDetailDialog.css'
+import CartService from "../../services/CartService";
+import {toast} from "react-toastify";
+import Cart from "../../model/Cart";
 
-const ProductDetailDialog = ({product, onClose, onAddToCart}) => {
+const ProductDetailDialog = ({cart, product, onClose, setCart}) => {
 	const [quantity, setQuantity] = useState(1)
 
 	if(!product) return null
 
-	const handleAddToCart = () => {
-		onAddToCart(product, quantity)
-		onClose()
+	const addToCart = () => {
+		let newCartItem = {
+			cartId: cart.id,
+			productId: product.id,
+			quantity: quantity
+		}
+		CartService.addToCart(newCartItem).then(
+			data => {
+				const newCart = new Cart(data)
+				setCart(newCart)
+				onClose()
+			}
+		).catch(error => {toast.error(error.response?.data?.message || 'Failed to add to cart')})
 	}
 
 	return (
@@ -28,7 +41,7 @@ const ProductDetailDialog = ({product, onClose, onAddToCart}) => {
 						min="1"
 					/>
 				</div>
-				<button className="add-to-cart-btn" onClick={handleAddToCart}>Add to Cart</button>
+				<button className="add-to-cart-btn" onClick={addToCart}>Add to Cart</button>
 			</div>
 		</div>
 	)
