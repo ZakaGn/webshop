@@ -69,11 +69,11 @@ function App(){
 	}
 
 	const getUserOrders = async() => {
-		console.log('App.js: getUserOrders() started')
+		console.log('App.js: ====================> getUserOrders() started')
 		if(!UserService.isAuthenticated()) return
 		console.log('App.js: getUserOrders()')
 		try{
-			const orderData = OrderService.getUserOrders()
+			const orderData = await OrderService.getUserOrders()
 			console.log('App.js: getUserOrders() orderData:', orderData)
 			setOrders(orderData.map(order => new Order(order)))
 		}catch(error){
