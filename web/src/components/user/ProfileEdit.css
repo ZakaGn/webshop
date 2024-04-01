@@ -28,6 +28,7 @@
 	padding: 10px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
+	box-sizing: border-box;
 }
 
 #profile-edit button[type="submit"], button[type="button"]{

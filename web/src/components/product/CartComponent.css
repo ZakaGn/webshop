@@ -45,10 +45,6 @@
 	align-items: center;
 }
 
-.cart-item:last-child {
-	border-bottom: none;
-}
-
 .cart-total {
 	font-size: 18px;
 	text-align: right;

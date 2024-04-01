@@ -3,7 +3,7 @@
 	overflow: hidden;
 }
 
-#navbar ul{
+#navbar>ul{
 	list-style-type: none;
 	padding: 0;
 	margin: 0;
@@ -11,7 +11,7 @@
 	align-items: center;
 }
 
-#navbar ul li a, #navbar ul li button, #navbar ul li span{
+#navbar>ul li a, #navbar ul li button, #navbar ul li span{
 	display: inline-block;
 	color: white;
 	text-align: center;
@@ -24,11 +24,11 @@
 	position: relative;
 }
 
-#navbar ul li a:hover, #navbar ul li button:hover{
+#navbar>ul li a:hover, #navbar ul li button:hover{
 	background-color: #555;
 }
 
-#navbar ul li:last-child{
+#navbar>ul li:last-child{
 	margin-left: auto;
 }
 

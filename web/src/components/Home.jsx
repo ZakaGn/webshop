@@ -19,19 +19,18 @@ const Home = ({cart, setCart}) => {
 	const [searchTerm, setSearchTerm] = useState('')
 	const [isLoading, setIsLoading] = useState(false)
 	let isMounted = true
+	let fetchedCategories = []
+	let fetchedProducts = []
 
 	useEffect(() => {
 		if(!isMounted) return
-		const fetchInitialData = async() => {
-			setIsLoading(true)
-			const fetchedCategories = await CategoryService.fetchCategories()
-			const fetchedProducts = await ProductService.fetchProducts()
-			setCategories(fetchedCategories)
-			setAllProducts(fetchedProducts)
-			setFilteredProducts(fetchedProducts)
-			setIsLoading(false)
-		}
-		fetchInitialData()
+		fetchInitialData().then(() => {
+				setCategories(fetchedCategories)
+				setAllProducts(fetchedProducts)
+				setFilteredProducts(fetchedProducts)
+				setIsLoading(false)
+			}
+		)
 		return () => {isMounted = false}
 	}, [])
 
@@ -42,6 +41,12 @@ const Home = ({cart, setCart}) => {
 		})
 		setFilteredProducts(newFilteredProducts)
 	}, [searchTerm, selectedCategory, allProducts])
+
+	const fetchInitialData = async() => {
+		setIsLoading(true)
+		fetchedCategories = await CategoryService.fetchCategories()
+		fetchedProducts = await ProductService.fetchProducts()
+	}
 
 	const handleCategorySelect = (category) => {
 		setSelectedCategory(category)

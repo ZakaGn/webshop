@@ -1,15 +1,15 @@
 import './CartComponent.css'
 import React from 'react'
-import OrderService from "services/OrderService";
+import OrderService from "../../services/OrderService";
 import {toast} from "react-toastify";
-import Cart from "model/Cart";
+import Cart from "../../model/Cart";
 
 const CartComponent = ({onClose, isOpen, cart, setCart}) => {
 	const totalPrice = cart.cartItems.reduce((total, item) => total + item.productPrice*item.quantity, 0)
 
 	const handleSubmitOrder = () => {
 		OrderService.submitOrder(cart).then(data => {
-			toast.success('Order submitted successfully');
+			toast.success('Order submitted successfully')
 			const newCart = new Cart(data)
 			setCart(newCart)
 			onClose()
@@ -26,7 +26,7 @@ const CartComponent = ({onClose, isOpen, cart, setCart}) => {
 					{cart.cartItems.length > 0 ? (
 						cart.cartItems.map((item, index) => (
 							<li className="cart-item" key={index}>
-								<span>{item.productName}</span> - <span>{item.quantity} x ${item.productPrice}</span>
+								<span>{item.productName}</span> <span>{item.quantity} x ${item.productPrice}</span>
 							</li>
 						))
 					) : (

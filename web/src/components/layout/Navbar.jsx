@@ -2,7 +2,7 @@ import './Navbar.css'
 import React, {useEffect, useState} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import {FaShoppingCart} from 'react-icons/fa'
-import CartComponent from "../CartComponent"
+import CartComponent from "../product/CartComponent"
 import userService from "services/UserService"
 import User from "../../model/User";
 
@@ -12,10 +12,8 @@ const Navbar = ({user, cart, setUser, setCart}) => {
 	const [isCartOpen, setIsCartOpen] = useState(false)
 
 	useEffect(() => {
-		if(cart?.cartItems?.length > 0){
 			setCartCount(cart.cartItems.reduce((total, item) => total + item.quantity, 0))
-		}
-	}, [cart]);
+	}, [cart])
 
 	const toggleCart = () => setIsCartOpen(!isCartOpen)
 
