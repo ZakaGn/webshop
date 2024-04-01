@@ -65,7 +65,7 @@ public class OrderController{
 	}
 
 	@PostMapping("/submit")
-	@PreAuthorize("hasAuthority('CLIENT')")
+	@PreAuthorize("hasAnyAuthority('CLIENT', 'EMPLOYER')")
 	public ResponseEntity<OrderDTO> submit(@Valid @RequestBody CartDTO cart){
 		OrderDTO order = orderService.submit(cart);
 		return new ResponseEntity<>(order, HttpStatus.CREATED);

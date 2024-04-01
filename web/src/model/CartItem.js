@@ -2,13 +2,14 @@ class CartItem{
 	constructor(data){
 		this.id = data.id
 		this.cartId = data.cartId
-		this.product = data.product
+		this.productId = data.productId
+		this.productName = data.productName
+		this.productPrice = data.productPrice
 		this.quantity = data.quantity
 	}
 
 	get total(){
-		if(!this.product) return 0
-		return this.product.price*this.quantity
+		return this.productPrice*this.quantity
 	}
 }
 

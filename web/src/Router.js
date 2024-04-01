@@ -13,7 +13,7 @@ import AdminOrders from "components/admin/order/AdminOrders"
 const AppRouter = ({user, cart, orders, getUser, setUser, setCart}) => {
 	return (
 		<Router>
-			<Navbar user={user} cart={cart} setUser={setUser}/>
+			<Navbar user={user} cart={cart} setUser={setUser} setCart={setCart}/>
 			<Routes>
 				<Route path="/" element={<Home cart={cart} setCart={setCart}/>}/>
 				<Route path="/login" element={<Login getUser={getUser}/>}/>

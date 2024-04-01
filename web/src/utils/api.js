@@ -138,9 +138,9 @@ const api = {
 		return response.data
 	},
 
-	submitOrder: async order => {
-		console.log("api.submitOrder", order)
-		const response = await axiosInstance.post('/orders/submit', order)
+	submitOrder: async cart => {
+		console.log("api.submitOrder", cart)
+		const response = await axiosInstance.post('/orders/submit', cart)
 		console.log("api.submitOrder.response:", response)
 		return response.data
 	},

@@ -1,5 +1,6 @@
 package com.example.webshop.dto;
 
+import com.example.webshop.model.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,8 @@ public class CartItemDTO{
 	private Long id;
 	private Long cartId;
 	private Long productId;
+	private String productName;
+	private String productPrice;
 	private int quantity;
 
 	@Override
@@ -20,7 +23,7 @@ public class CartItemDTO{
 		return "CartItemDTO{" +
 			"id=" + id +
 			", cartId=" + cartId +
-			", productId=" + productId +
+			", product=" + productName +
 			", quantity=" + quantity +
 			"}";
 	}

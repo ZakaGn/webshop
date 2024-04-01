@@ -1,18 +1,21 @@
 import './Navbar.css'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import {FaShoppingCart} from 'react-icons/fa'
-import {toast} from "react-toastify";
 import CartComponent from "../CartComponent"
 import userService from "services/UserService"
-import OrderService from "services/OrderService"
-import CartService from "services/CartService";
 import User from "../../model/User";
 
-const Navbar = ({user, cart, setUser}) => {
+const Navbar = ({user, cart, setUser, setCart}) => {
 	const navigate = useNavigate()
 	const [cartCount, setCartCount] = useState(0)
 	const [isCartOpen, setIsCartOpen] = useState(false)
+
+	useEffect(() => {
+		if(cart?.cartItems?.length > 0){
+			setCartCount(cart.cartItems.reduce((total, item) => total + item.quantity, 0))
+		}
+	}, [cart]);
 
 	const toggleCart = () => setIsCartOpen(!isCartOpen)
 
@@ -20,16 +23,6 @@ const Navbar = ({user, cart, setUser}) => {
 		userService.logout()
 		navigate('/login', {replace: true})
 		setUser(new User(null))
-	}
-
-	const handleSubmitOrder = () => {
-		OrderService.submitOrder(cart).then(response => {
-			console.log('Order submitted: ', response)
-			setIsCartOpen(false)
-			setCartCount(0)
-		}).catch(error => {
-			console.error('Order submission failed: ', error);
-		});
 	}
 
 	return (
@@ -74,8 +67,8 @@ const Navbar = ({user, cart, setUser}) => {
 				<CartComponent
 					onClose={toggleCart}
 					isOpen={isCartOpen}
-					cartItems={cart.cartItems}
-					onSubmitOrder={handleSubmitOrder}
+					cart={cart}
+					setCart={setCart}
 				/>
 			}
 		</nav>

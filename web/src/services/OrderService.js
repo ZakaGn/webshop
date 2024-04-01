@@ -7,7 +7,7 @@ const OrderService = {
 	createOrder: async (order) => api.createOrder(order),
 	updateOrder: async (order) => api.updateOrder(order),
 	deleteOrder: async (id) => api.deleteOrder(id),
-	submitOrder: async (order) => api.submitOrder(order)
+	submitOrder: async (cart) => api.submitOrder(cart)
 }
 
 export default OrderService
