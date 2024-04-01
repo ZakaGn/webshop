@@ -69,14 +69,26 @@ const AdminCategories = () => {
 				await CategoryService.updateCategory(updatedCategory)
 				toast.success('Category updated successfully')
 			}catch(error){
-				toast.error('Failed to update category')
+				if(error.response?.data?.errors){
+					for(let field in error.response.data.errors){
+						toast.error(error.response.data.errors[field])
+					}
+				}else{
+					toast.error(error.response?.data?.message || 'Failed to update category')
+				}
 			}
 		}else{
 			try{
 				await CategoryService.addCategory(updatedCategory)
 				toast.success('Category added successfully')
 			}catch(error){
-				toast.error('Failed to add category')
+				if(error.response?.data?.errors){
+					for(let field in error.response.data.errors){
+						toast.error(error.response.data.errors[field])
+					}
+				}else{
+					toast.error(error.response?.data?.message || 'Failed to add category')
+				}
 			}
 		}
 		onCategoryFormClose()

@@ -45,14 +45,14 @@ public class SecurityConfig{
 				.requestMatchers(POST, "/user/update").hasAnyAuthority("CLIENT", "EMPLOYER", "MANAGER")
 
 				.requestMatchers(GET, "/products/category", "/products/category/{id}").permitAll()
-				.requestMatchers(POST, "/products/category").hasAnyAuthority("EMPLOYER")
-				.requestMatchers(PUT, "/products/category").hasAnyAuthority("EMPLOYER")
-				.requestMatchers(DELETE, "/products/category/{id}").hasAnyAuthority("EMPLOYER")
+				.requestMatchers(POST, "/products/category").hasAuthority("EMPLOYER")
+				.requestMatchers(PUT, "/products/category").hasAuthority("EMPLOYER")
+				.requestMatchers(DELETE, "/products/category/{id}").hasAuthority("EMPLOYER")
 
 				.requestMatchers(GET, "/products", "/products/{id}", "products/search/{name}").permitAll()
-				.requestMatchers(POST, "/products").hasAnyAuthority("EMPLOYER")
-				.requestMatchers(PUT, "/products").hasAnyAuthority("EMPLOYER")
-				.requestMatchers(DELETE, "/products/{id}").hasAnyAuthority("EMPLOYER")
+				.requestMatchers(POST, "/products").hasAuthority("EMPLOYER")
+				.requestMatchers(PUT, "/products").hasAuthority("EMPLOYER")
+				.requestMatchers(DELETE, "/products/{id}").hasAuthority("EMPLOYER")
 
 				.requestMatchers(GET, "/orders/get/{id}", "/orders/get/all").hasAuthority("EMPLOYER")
 				.requestMatchers(GET, "/orders/get").hasAnyAuthority("CLIENT","EMPLOYER")

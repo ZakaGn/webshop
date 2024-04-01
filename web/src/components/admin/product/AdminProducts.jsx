@@ -78,14 +78,27 @@ const AdminProducts = () => {
 				await ProductService.updateProduct(updatedProduct)
 				toast.success('Product updated successfully')
 			}catch(error){
-				toast.error('Failed to update product')
+				if(error.response?.data?.errors){
+					for(let field in error.response.data.errors){
+						toast.error(error.response.data.errors[field])
+					}
+				}else{
+					toast.error(error.response?.data?.message || 'Failed to update product')
+				}
 			}
 		}else{
 			try{
 				await ProductService.addProduct(updatedProduct)
 				toast.success('Product added successfully')
 			}catch(error){
-				toast.error('Failed to add product')
+				console.log("AddProductError:", error.response?.data?.errors)
+				if(error.response?.data?.errors){
+					for(let field in error.response.data.errors){
+						toast.error(error.response.data.errors[field])
+					}
+				}else{
+					toast.error(error.response?.data?.message || 'Failed to add product')
+				}
 			}
 		}
 		onProductFormClose()
