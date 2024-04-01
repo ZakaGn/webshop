@@ -1,4 +1,4 @@
-package com.example.webshop.dto.product;
+package com.example.webshop.DTO.product;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;

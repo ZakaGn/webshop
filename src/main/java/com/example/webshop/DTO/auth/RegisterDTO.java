@@ -1,19 +1,16 @@
-package com.example.webshop.dto.auth;
+package com.example.webshop.DTO.auth;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
+@Valid
 @NoArgsConstructor
-public class UpdateUserDTO{
+@AllArgsConstructor
+public class RegisterDTO{
 	@NotBlank(message = "First name is required")
 	@Size(min = 3, max = 50, message = "First name must be between 3 and 50 characters")
 	@Pattern(regexp = "^[a-zA-Z]+$", message = "First name must contain only letters")
@@ -26,4 +23,8 @@ public class UpdateUserDTO{
 
 	@Email(message = "Email must be a valid email address")
 	private String email;
+
+	@NotBlank(message = "Password is required")
+	@Size(min = 6, max = 50, message = "Password must be between 6 and 50 characters")
+	private String password;
 }

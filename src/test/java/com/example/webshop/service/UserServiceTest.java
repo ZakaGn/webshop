@@ -1,6 +1,6 @@
 package com.example.webshop.service;
 
-import com.example.webshop.dto.auth.*;
+import com.example.webshop.DTO.auth.*;
 import com.example.webshop.exception.apiException.badRequestException.UserNotFoundException;
 import com.example.webshop.model.User;
 import com.example.webshop.model.auth.Credentials;
@@ -61,24 +61,33 @@ public class UserServiceTest{
 
 	@Test
 	void loginUserSuccessfully(){
-		// Setup
 		LoginDTO loginDTO = new LoginDTO("john@example.com", "password");
 		String expectedToken = "jwtToken";
+		User user = new User();
+		Credentials credentials = new Credentials();
+		credentials.setEmail(loginDTO.getEmail());
+		credentials.setPassword("encodedPassword");
+		credentials.setRole(Role.CLIENT);
+		user.setCredentials(credentials);
 
-		when(authenticationManager.authenticate(any(Authentication.class))).thenReturn(mock(Authentication.class));
-		when(jwtTokenProvider.generateToken(any(Authentication.class))).thenReturn(expectedToken);
+		Authentication auth = new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword());
 
-		// Action
+		when(userRepository.findUserByCredentialsEmail(loginDTO.getEmail())).thenReturn(Optional.of(user));
+		when(authenticationManager.authenticate(any(Authentication.class))).thenReturn(auth);
+		when(jwtTokenProvider.generateToken(auth)).thenReturn(expectedToken);
+
+		// When
 		LoginResponseDTO actualLogin = userService.login(loginDTO);
 
-		// Assert
+		// Then
 		assertNotNull(actualLogin.getToken(), "Token should not be null");
-		//assertEquals(actualLogin.getRole(), actualLogin, "Expected token does not match the actual token");
+		assertEquals(expectedToken, actualLogin.getToken(), "Expected token does not match the actual token");
 
 		// Verifications
 		verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
 		verify(jwtTokenProvider).generateToken(any(Authentication.class));
 	}
+
 
 	@Test
 	void getUserDataByEmail_UserExists_ReturnsUserDTO(){

@@ -1,7 +1,7 @@
 package com.example.webshop.controller;
 
-import com.example.webshop.dto.order.CartDTO;
-import com.example.webshop.dto.order.OrderDTO;
+import com.example.webshop.DTO.order.CartDTO;
+import com.example.webshop.DTO.order.OrderDTO;
 import com.example.webshop.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

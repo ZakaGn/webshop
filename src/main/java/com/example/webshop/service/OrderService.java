@@ -1,9 +1,9 @@
 package com.example.webshop.service;
 
-import com.example.webshop.dto.order.CartDTO;
-import com.example.webshop.dto.order.CartItemDTO;
-import com.example.webshop.dto.order.OrderDTO;
-import com.example.webshop.dto.order.OrderDetailDTO;
+import com.example.webshop.DTO.order.CartDTO;
+import com.example.webshop.DTO.order.CartItemDTO;
+import com.example.webshop.DTO.order.OrderDTO;
+import com.example.webshop.DTO.order.OrderDetailDTO;
 import com.example.webshop.exception.apiException.badRequestException.*;
 import com.example.webshop.exception.apiException.unauthorizedException.UserNotAuthenticatedException;
 import com.example.webshop.model.*;
