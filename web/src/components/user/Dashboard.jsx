@@ -1,9 +1,13 @@
 import './Dashboard.css'
-import React from 'react'
+import React, {useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 
 const Dashboard = ({user}) => {
 	const navigate = useNavigate()
+
+	useEffect(() => {
+		if(!user?.email) navigate('/login')
+	}, []);
 
 	const handleEditProfileClick = () => {
 		navigate('/edit-profile')

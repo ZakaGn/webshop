@@ -1,9 +1,9 @@
 import './ProfileEdit.css'
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {toast} from 'react-toastify'
 import userService from "services/UserService"
-import User from "../../model/User";
+import User from "model/User"
 
 const ProfileEdit = ({user, setUser}) => {
 	const [profile, setProfile] = useState({firstName: user.firstName, lastName: user.lastName, email: user.email})
@@ -53,8 +53,11 @@ const ProfileEdit = ({user, setUser}) => {
 			toast.success('Profile updated successfully')
 			navigate('/dashboard')
 		}catch(error){
-			const errorMessage = error.response?.data?.message || 'Failed to update profile'
-			toast.error(errorMessage)
+			if(error.response?.data?.errors){
+				setErrors(error.response.data.errors)
+			}else{
+				toast.error(error.response?.data?.message || 'Failed to update profile')
+			}
 		}finally{
 			setLoading(false)
 		}

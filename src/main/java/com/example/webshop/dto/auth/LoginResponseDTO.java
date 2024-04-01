@@ -1,14 +1,13 @@
-package com.example.webshop.dto;
+package com.example.webshop.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
-public class TokenDTO{
+public class LoginResponseDTO{
 	private String token;
+	private String role;
 }

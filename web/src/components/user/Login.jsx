@@ -12,14 +12,17 @@ const Login = ({getUser}) => {
 	const handleChange = (e) => {
 		const {name, value} = e.target
 		setFormData(prevState => ({...prevState, [name]: value}))
-		if(formErrors[name]){setFormErrors(prevErrors => ({...prevErrors, [name]: ''}))}
+		if(formErrors[name]){
+			setFormErrors(prevErrors => ({...prevErrors, [name]: ''}))
+		}
 	}
 
 	const handleSubmit = async(e) => {
 		e.preventDefault()
 		const {email, password} = formData
 
-		if(!email){setFormErrors(prev => ({...prev, email: "Email is required"}))
+		if(!email){
+			setFormErrors(prev => ({...prev, email: "Email is required"}))
 			return
 		}
 
@@ -31,13 +34,15 @@ const Login = ({getUser}) => {
 		userService
 			.login(email, password)
 			.then(() => {
-				getUser()
 				toast.success('Login successful!')
-				navigate("/dashboard")
+				getUser().then(() => navigate('/dashboard'))
 			})
 			.catch(error => {
-				console.error('Login failed:', error)
-				toast.error(error.response?.data?.message || 'Failed to log in. Please try again.')
+				if(error.response?.data?.errors){
+					setFormErrors(error.response?.data?.errors)
+				}else{
+					toast.error(error.response?.data?.message || 'Failed to log in. Please try again.')
+				}
 			})
 	}
 

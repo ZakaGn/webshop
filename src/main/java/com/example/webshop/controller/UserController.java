@@ -1,9 +1,10 @@
 package com.example.webshop.controller;
 
-import com.example.webshop.dto.*;
+import com.example.webshop.dto.auth.*;
 import com.example.webshop.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
@@ -32,12 +33,14 @@ public class UserController{
 	}
 
 	@GetMapping("/data")
+	@PreAuthorize("hasAuthority('CLIENT') or hasAuthority('EMPLOYER')")
 	public ResponseEntity<UserDTO> getUser(@AuthenticationPrincipal String email){
 		UserDTO userDTO = userService.getUserDataByEmail(email);
 		return ResponseEntity.ok(userDTO);
 	}
 
 	@PostMapping("update")
+	@PreAuthorize("hasAuthority('CLIENT') or hasAuthority('EMPLOYER')")
 	public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UpdateUserDTO updateUserDTO, Principal principal){
 		System.out.println("Principal: " + principal.getName());
 		UserDTO user = userService.updateUserDetails(updateUserDTO, principal.getName());

@@ -1,4 +1,4 @@
-package com.example.webshop.dto;
+package com.example.webshop.dto.order;
 
 import com.example.webshop.model.OrderStatus;
 import lombok.AllArgsConstructor;

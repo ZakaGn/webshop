@@ -63,7 +63,11 @@ const Register = () => {
 			toast.success('Registration successful! Please login.')
 			navigate("/login")
 		}catch(error){
-			toast.error(error.response?.data?.message || 'Registration failed. Please try again.')
+			if(error.response?.data?.errors){
+				setFormErrors(error.response?.data?.errors)
+			}else{
+				toast.error(error.response?.data?.message || 'Registration failed. Please try again.')
+			}
 		}
 	}
 

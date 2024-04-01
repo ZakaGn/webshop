@@ -1,8 +1,8 @@
 import './CartComponent.css'
 import React from 'react'
-import OrderService from "../services/OrderService";
+import OrderService from "services/OrderService";
 import {toast} from "react-toastify";
-import Cart from "../model/Cart";
+import Cart from "model/Cart";
 
 const CartComponent = ({onClose, isOpen, cart, setCart}) => {
 	const totalPrice = cart.cartItems.reduce((total, item) => total + item.productPrice*item.quantity, 0)

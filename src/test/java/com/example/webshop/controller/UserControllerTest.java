@@ -1,6 +1,6 @@
 package com.example.webshop.controller;
 
-import com.example.webshop.dto.*;
+import com.example.webshop.dto.auth.*;
 import com.example.webshop.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

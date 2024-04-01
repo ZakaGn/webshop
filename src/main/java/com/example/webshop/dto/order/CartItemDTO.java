@@ -1,6 +1,5 @@
-package com.example.webshop.dto;
+package com.example.webshop.dto.order;
 
-import com.example.webshop.model.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

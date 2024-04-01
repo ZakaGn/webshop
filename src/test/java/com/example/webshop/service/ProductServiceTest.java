@@ -1,7 +1,7 @@
 package com.example.webshop.service;
 
-import com.example.webshop.dto.CategoryDto;
-import com.example.webshop.dto.ProductDTO;
+import com.example.webshop.dto.product.CategoryDto;
+import com.example.webshop.dto.product.ProductDTO;
 import com.example.webshop.model.Category;
 import com.example.webshop.model.Product;
 import com.example.webshop.repository.CategoryRepository;

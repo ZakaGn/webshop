@@ -1,6 +1,6 @@
 package com.example.webshop.service;
 
-import com.example.webshop.dto.*;
+import com.example.webshop.dto.auth.*;
 import com.example.webshop.exception.apiException.badRequestException.UserNotFoundException;
 import com.example.webshop.model.User;
 import com.example.webshop.model.auth.Credentials;

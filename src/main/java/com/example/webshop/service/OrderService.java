@@ -1,9 +1,9 @@
 package com.example.webshop.service;
 
-import com.example.webshop.dto.CartDTO;
-import com.example.webshop.dto.CartItemDTO;
-import com.example.webshop.dto.OrderDTO;
-import com.example.webshop.dto.OrderDetailDTO;
+import com.example.webshop.dto.order.CartDTO;
+import com.example.webshop.dto.order.CartItemDTO;
+import com.example.webshop.dto.order.OrderDTO;
+import com.example.webshop.dto.order.OrderDetailDTO;
 import com.example.webshop.exception.apiException.badRequestException.*;
 import com.example.webshop.exception.apiException.unauthorizedException.UserNotAuthenticatedException;
 import com.example.webshop.model.*;
@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import com.example.webshop.repository.CartRepository;
 

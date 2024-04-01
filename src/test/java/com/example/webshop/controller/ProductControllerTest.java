@@ -1,7 +1,7 @@
 package com.example.webshop.controller;
 
-import com.example.webshop.dto.CategoryDto;
-import com.example.webshop.dto.ProductDTO;
+import com.example.webshop.dto.product.CategoryDto;
+import com.example.webshop.dto.product.ProductDTO;
 import com.example.webshop.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
