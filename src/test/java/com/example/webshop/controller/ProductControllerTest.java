@@ -3,30 +3,25 @@ package com.example.webshop.controller;
 import com.example.webshop.dto.product.CategoryDto;
 import com.example.webshop.dto.product.ProductDTO;
 import com.example.webshop.service.ProductService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.test.context.support.WithMockUser;
 import java.util.Collections;
-import static org.hamcrest.Matchers.hasSize;
+import java.util.List;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ProductControllerTest{
-
-	private MockMvc mockMvc;
 
 	@Mock
 	private ProductService productService;
@@ -34,95 +29,154 @@ class ProductControllerTest{
 	@InjectMocks
 	private ProductController productController;
 
+	private CategoryDto categoryDto;
+	private ProductDTO productDTO;
+
 	@BeforeEach
 	void setUp(){
-		mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
+		categoryDto = new CategoryDto();
+		productDTO = new ProductDTO();
 	}
 
 	@Test
-	void getAllCategoriesTest() throws Exception{
-		CategoryDto categoryDto = new CategoryDto(1L, "Electronics", "Electronic Items");
-		given(productService.getAllCategories()).willReturn(Collections.singletonList(categoryDto));
+	void getAllCategoriesTest(){
+		// Arrange
+		when(productService.getAllCategories()).thenReturn(Collections.singletonList(categoryDto));
 
-		mockMvc.perform(get("/products/category").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-		       .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+		// Act
+		ResponseEntity<List<CategoryDto>> response = productController.getAllCategories();
+
+		// Assert
+		assertThat(response.getStatusCode(), is(HttpStatus.OK));
+		assertThat(response.getBody(), hasItem(categoryDto));
 	}
 
 	@Test
-	void createCategory_Success() throws Exception{
-		CategoryDto categoryDto = new CategoryDto(null, "Electronics", "Electronic Items");
-		CategoryDto savedCategoryDto = new CategoryDto(1L, "Electronics", "Electronic Items");
+	@WithMockUser(authorities = "EMPLOYER")
+	void createCategoryTest(){
+		// Arrange
+		when(productService.createCategory(any(CategoryDto.class))).thenReturn(categoryDto);
 
-		given(productService.createCategory(any(CategoryDto.class))).willReturn(savedCategoryDto);
+		// Act
+		ResponseEntity<CategoryDto> response = productController.createCategory(categoryDto);
 
-		mockMvc.perform(post("/products/category").contentType(MediaType.APPLICATION_JSON)
-		                                          .content(new ObjectMapper().writeValueAsString(categoryDto))).andExpect(
-			status().isCreated()).andExpect(content().json(new ObjectMapper().writeValueAsString(savedCategoryDto)));
+		// Assert
+		assertThat(response.getStatusCode(), is(HttpStatus.CREATED));
+		assertThat(response.getBody(), is(categoryDto));
 	}
 
 	@Test
-	void deleteCategory_Success() throws Exception{
-		doNothing().when(productService).deleteCategory(1L);
+	void getCategoryByIdTest(){
+		// Arrange
+		when(productService.getCategoryById(anyLong())).thenReturn(categoryDto);
 
-		mockMvc.perform(delete("/products/category/1").contentType(MediaType.APPLICATION_JSON)).andExpect(
-			status().isNoContent());
+		// Act
+		ResponseEntity<CategoryDto> response = productController.getCategoryById(1L);
 
-		verify(productService, times(1)).deleteCategory(1L);
+		// Assert
+		assertThat(response.getStatusCode(), is(HttpStatus.OK));
+		assertThat(response.getBody(), is(categoryDto));
 	}
 
 	@Test
-	void getAllProductsTest() throws Exception{
-		ProductDTO productDto = new ProductDTO();
-		// Mock service method
-		given(productService.getAllProducts()).willReturn(Collections.singletonList(productDto));
+	@WithMockUser(authorities = "EMPLOYER")
+	void deleteCategoryTest(){
+		// Arrange
+		doNothing().when(productService).deleteCategory(anyLong());
 
-		mockMvc.perform(get("/products").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(
-			jsonPath("$", hasSize(1)));
+		// Act
+		ResponseEntity<Void> response = productController.deleteCategory(1L);
+
+		// Assert
+		assertThat(response.getStatusCode(), is(HttpStatus.NO_CONTENT));
+		verify(productService, times(1)).deleteCategory(anyLong());
 	}
 
 	@Test
-	void createProductTest() throws Exception{
-		ProductDTO productDto = new ProductDTO();
-		ProductDTO savedProductDto = new ProductDTO();
+	void getAllProductsTest(){
+		// Arrange
+		when(productService.getAllProducts()).thenReturn(Collections.singletonList(productDTO));
 
-		given(productService.createProduct(any(ProductDTO.class))).willReturn(savedProductDto);
+		// Act
+		ResponseEntity<List<ProductDTO>> response = productController.getAllProducts();
 
-		mockMvc.perform(post("/products").contentType(MediaType.APPLICATION_JSON)
-		                                 .content(new ObjectMapper().writeValueAsString(productDto))).andExpect(
-			status().isCreated());
+		// Assert
+		assertThat(response.getStatusCode(), is(HttpStatus.OK));
+		assertThat(response.getBody(), hasItem(productDTO));
+		verify(productService, times(1)).getAllProducts();
 	}
 
 	@Test
-	void getProductByIdTest() throws Exception{
-		Long productId = 1L;
-		ProductDTO productDto = new ProductDTO();
+	void getProductByIdTest(){
+		// Arrange
+		when(productService.getProductById(anyLong())).thenReturn(productDTO);
 
-		given(productService.getProductById(productId)).willReturn(productDto);
+		// Act
+		ResponseEntity<ProductDTO> response = productController.getProductById(1L);
 
-		mockMvc.perform(get("/products/{productId}", productId).contentType(MediaType.APPLICATION_JSON)).andExpect(
-			status().isOk());
+		// Assert
+		assertThat(response.getStatusCode(), is(HttpStatus.OK));
+		assertThat(response.getBody(), is(productDTO));
+		verify(productService, times(1)).getProductById(anyLong());
 	}
 
 	@Test
-	void updateProductTest() throws Exception{
-		ProductDTO productDto = new ProductDTO();
-		ProductDTO updatedProductDto = new ProductDTO();
+	void searchProductsByNameTest(){
+		// Arrange
+		String productName = "test";
+		when(productService.searchProductsByName(productName)).thenReturn(Collections.singletonList(productDTO));
 
-		given(productService.updateProduct(any(ProductDTO.class))).willReturn(updatedProductDto);
+		// Act
+		ResponseEntity<List<ProductDTO>> response = productController.searchProductsByName(productName);
 
-		mockMvc.perform(put("/products").contentType(MediaType.APPLICATION_JSON)
-		                                .content(new ObjectMapper().writeValueAsString(productDto))).andExpect(
-			status().isOk());
+		// Assert
+		assertThat(response.getStatusCode(), is(HttpStatus.OK));
+		assertThat(response.getBody(), hasItem(productDTO));
+		verify(productService, times(1)).searchProductsByName(productName);
 	}
 
 	@Test
-	void deleteProductTest() throws Exception{
+	@WithMockUser(authorities = "EMPLOYER")
+	void createProductTest(){
+		// Arrange
+		when(productService.createProduct(any(ProductDTO.class))).thenReturn(productDTO);
+
+		// Act
+		ResponseEntity<ProductDTO> response = productController.createProduct(productDTO);
+
+		// Assert
+		assertThat(response.getStatusCode(), is(HttpStatus.CREATED));
+		assertThat(response.getBody(), is(productDTO));
+		verify(productService, times(1)).createProduct(any(ProductDTO.class));
+	}
+
+	@Test
+	@WithMockUser(authorities = "EMPLOYER")
+	void updateProductTest(){
+		// Arrange
+		when(productService.updateProduct(any(ProductDTO.class))).thenReturn(productDTO);
+
+		// Act
+		ResponseEntity<ProductDTO> response = productController.updateProduct(productDTO);
+
+		// Assert
+		assertThat(response.getStatusCode(), is(HttpStatus.OK));
+		assertThat(response.getBody(), is(productDTO));
+		verify(productService, times(1)).updateProduct(any(ProductDTO.class));
+	}
+
+	@Test
+	@WithMockUser(authorities = "EMPLOYER")
+	void deleteProductTest(){
+		// Arrange
 		Long productId = 1L;
 		doNothing().when(productService).deleteProduct(productId);
 
-		mockMvc.perform(delete("/products/{productId}", productId).contentType(MediaType.APPLICATION_JSON)).andExpect(
-			status().isNoContent());
+		// Act
+		ResponseEntity<Void> response = productController.deleteProduct(productId);
 
+		// Assert
+		assertThat(response.getStatusCode(), is(HttpStatus.NO_CONTENT));
 		verify(productService, times(1)).deleteProduct(productId);
 	}
 
