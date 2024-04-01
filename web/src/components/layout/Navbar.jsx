@@ -12,7 +12,10 @@ const Navbar = ({user, cart, setUser, setCart}) => {
 	const [isCartOpen, setIsCartOpen] = useState(false)
 
 	useEffect(() => {
+		if(cart && cart.cartItems)
 			setCartCount(cart.cartItems.reduce((total, item) => total + item.quantity, 0))
+		else
+			setCartCount(0)
 	}, [cart])
 
 	const toggleCart = () => setIsCartOpen(!isCartOpen)
